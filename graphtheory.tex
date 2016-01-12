@@ -1,0 +1,297 @@
+
+\documentclass[12pt]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% package and document formatting stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath,amsthm,amsfonts,amscd,amssymb,amsopn,mathabx}
+\usepackage{eucal,mathrsfs,makeidx,enumerate}
+
+\usepackage{fullpage,color}
+\usepackage[pdfstartview=FitH,
+%             pdfauthor={\myauthor},
+%             pdftitle={\mytitle},
+            colorlinks,
+            linkcolor=reference,
+            citecolor=citation,
+            urlcolor=e-mail,
+            backref]{hyperref}
+\usepackage[all]{xy}
+
+\definecolor{todo}{rgb}{.80,.20,.20}
+\definecolor{e-mail}{rgb}{0,.40,.80}
+\definecolor{reference}{rgb}{.10,.40,.42}
+\definecolor{mrnumber}{rgb}{.80,.40,0}
+\definecolor{citation}{rgb}{0,.40,.80}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% theorem stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\theoremstyle{plain}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{deflem}[thm]{Definition/Lemma}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{aside}[thm]{Aside}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{facts}[thm]{Facts}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{prop}[thm]{Proposition}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% typography stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\mb}[1]{\mathbf #1}
+\newcommand{\mbb}[1]{\mathbb #1}
+\newcommand{\mf}[1]{\mathfrak #1}
+\newcommand{\mc}[1]{\mathcal #1}
+\newcommand{\ms}[1]{\mathscr #1}
+\newcommand{\mcu}[1]{\mathcu #1}
+\newcommand{\oper}[1]{\operatorname{#1}}
+
+\newcommand{\da}{\downarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\hra}{\hookrightarrow}
+\newcommand{\dra}{\dashrightarrow}
+\newcommand{\la}{\leftarrow}
+\newcommand{\lra}{\longrightarrow}
+
+\newcommand{\ov}{\overline}
+\newcommand{\til}{\widetilde}
+\newcommand{\wh}{\widehat}
+
+\newcommand{\ZZ}{\mathbb{Z}}
+
+\newcommand{\ann}{\oper{ann}}
+\newcommand{\coker}{\oper{coker}}
+\newcommand{\End}{\oper{End}}
+\newcommand{\Aut}{\oper{Aut}}
+\newcommand{\Stab}{\oper{Stab}}
+
+\newcommand{\ind}{\oper{ind}}
+\newcommand{\per}{\oper{per}}
+\newcommand{\cores}{\oper{cor}}
+
+\newcommand{\Br}{\oper{Br}}
+\newcommand{\quat}[3]{
+  \left(\begin{matrix} #1, #2 \\ #3
+  \end{matrix}\right)
+}
+\newcommand{\symb}[3]{
+  \left(#1, #2\right)_{#3}
+}
+
+\newcommand{\lcm}{\oper{lcm}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% other stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeindex
+\newcommand{\X}[1]{#1\index{#1}}
+\newcommand{\Xb}[1]{\textbf{#1}\index{#1}}
+
+\newcommand{\todo}[1]{\textcolor{todo}{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% end preamble 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% title stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\author{Daniel Krashen}
+\title{Graph Theory}
+
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% document stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Basic Notions}
+
+\section{Preliminary notions and notations}
+
+The substructure of the majority of modern mathematics is set theory. It
+therefore would behoove us to take a very slight digression into some
+useful concepts and notations.
+
+\begin{defn}
+A \Xb{set} is a collection of elements, is defined exactly by its elements.
+Two sets are equal if they contain the same elements.
+\end{defn}
+
+\begin{defn}
+For a set $S$, its \Xb{power set} $\ms P(S)$, is the set whose
+elements are the subsets of $S$
+\end{defn}
+
+\begin{defn}
+For a set $S$, we let $\ms P_k(S)$ denote its subsets with exactly $k$
+elements.
+\end{defn}
+
+\begin{defn}
+For sets $S, T$ we let $S \times T$ denote the set whose elements are
+ordered pairs $(s, t)$ where $s \in S$ and $t \in T$.
+\end{defn}
+
+\begin{defn}
+A \Xb{multiset} $\ms S$ is a pair $(S, m)$, where $S$ is a set, and $m$ is a
+function $m: S \to \mathbb Z_{> 0}$ from $S$ to the positive integers. For
+$s \in S$, we refer to $m(s)$ as the multiplicity of $s$ in $\ms S$. We
+write $s \in \ms S$. We call $S$ the underlying set of $\ms S$.
+
+For a multiset $\ms S = (S, m)$, we will use the notation $m_{\ms S}$ to
+refer to $m$.
+\end{defn}
+
+\begin{defn}
+Let $\ms S$ and $\ms T$ be multisets. We say that $\ms S \subset \ms T$ if
+the underlying set of $\ms S$ is contained in the underlying set of $\ms
+T$.
+\end{defn}
+
+If $S$ is a set, we will also identify $S$ with the multiset $(S, m)$
+defined by $m(s) = 1$ for each $s \in S$ (that is, $S$ contains each of its
+elements exactly $1$ time).
+
+These mutisets are occasionally useful in combinatorics to think of the
+idea of sampling with replacement/repetition.
+
+\begin{defn}
+If $\ms S = (S, m)$ is a multiset, we define the \Xb{cardinality} of $\ms
+S$, denoted  $\#\ms S$, to be
+\[ \sum_{s \in S} m(s). \]
+\end{defn}
+In particular, considering a set $T$ as a multiset as described above, we
+have $\# T$ is exactly the number of elements of $T$.
+
+\begin{defn} \label{multisubsets definition}
+Let $S$ be a set. We write $\ms R(S)$ to denote the set of all mulisubsets
+of $S$, and $\ms R_k(S)$ the set of all multisubsets of $S$ with
+cardinality exactly $S$.
+\end{defn}
+
+
+\section{Definitions of graphs and examples}
+Graphs encode the idea of connections between things, for example
+\begin{itemize}
+\item networks of computers
+\item people and their relationships
+\item cities and highways
+\item sets and intersections
+\item workers and tasks
+\end{itemize}
+
+
+In formal mathematical terms, a graph is:
+\begin{defn}
+A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of 
+\begin{itemize}
+\item a set $V$, whose elements are referred to as vertices, 
+\item a set $E$, whose elements are referred to as edges, and
+\item an ``incidence'' function $\psi: E \to \ms R_2(V)$,
+\end{itemize}
+where $\ms R_2(V)$ is the set of unordered pairs of elements of $V$ (which
+one may also think of as two elements multisubsets of $V$ -- see
+Definition~\ref{multisubsets definition}).
+\end{defn}
+
+PICTURES AND EXAMPLES HERE
+
+\begin{notn}
+For a graph $G = (V, E, \psi)$ we write $V_G$ for $V$, $E_G$ for $E$ and
+$\psi_G$ for $\psi$.
+\end{notn}
+In other words, using this notational convention, if we are given graphs
+$G, H, K$, and have not specified letters for their sets of vertices,
+edges, etcetera, we may write, for example, $E_K$ for the edges of the
+graph $K$, $V_H$ for the vertices of $H$, and $\psi_G$ for the incidence
+function of $G$.
+
+\begin{defn}
+Let $G$ be a graph, $e \in E_G$ an edge and $v \in V_G$ a vertex. We say
+that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
+\end{defn}
+
+DIAGRAM
+
+\begin{defn}
+Let $G$ be a graph. If $e \in E_G$ is an edge, we say that $e$ is a
+\Xb{loop}, if $e$ is incident to exactly one vertex.
+\end{defn}
+
+\begin{defn}
+We say that $G$ is a \Xb{simple graph} if
+\begin{itemize}
+\item $G$ has no loops,
+\item there is at most $1$ edge incident to any pair of vertices.
+\end{itemize}
+\end{defn}
+Note that the second condition is the same as requiring that the function
+$\psi_G$ be one-to-one.
+
+Graphs can be drawn in many different ways:
+
+\begin{defn}
+$G$ is called a \Xb{planar graph} if it may be drawn in the plane with no
+edges crossing.
+\end{defn}
+
+\section{Real world graph problems}
+
+\subsection{Scheduling}
+\begin{itemize}
+\item vertices = jobs that need to be done
+\item edges = jobs which require conflicting resources
+\end{itemize}
+problem: how to decide how many ``periods of work'' needed to complete
+all jobs.
+
+Similar problem: table arrangements at a wedding
+\begin{itemize}
+\item vertices = guests
+\item edges = guest that don't get along
+\end{itemize}
+problem: how many tables?
+
+translation: vertex colorings, chromatic number of a graph
+
+\subsection{Tournaments}
+
+various teams need to play each other. disjoint pairs of teams can play
+simultaneously, but of course the same team can't play at the same time.
+How many rounds are needed for teams to play each other?
+\begin{itemize}
+\item vertices = teams
+\item edges = teams who need to play each other
+\end{itemize}
+problem: how many rounds?
+
+\chapter{Subgraphs, new graphs from old}
+
+\chapter{Proofs and formality}
+
+\chapter{Spanning subgraphs and applications}
+
+%\bibliographystyle{alpha}
+%\bibliography{citations}
+\printindex
+
+\end{document}

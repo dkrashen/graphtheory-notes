@@ -98,6 +98,7 @@
 \makeindex
 \newcommand{\X}[1]{#1\index{#1}}
 \newcommand{\Xb}[1]{\textbf{#1}\index{#1}}
+\newcommand{\Ab}[2]{\textbf{#1}\index{#2}}
 
 \newcommand{\todo}[1]{\textcolor{todo}{#1}}
 
@@ -136,6 +137,13 @@ A \Xb{set} is a collection of elements, is defined exactly by its elements.
 Two sets are equal if they contain the same elements.
 \end{defn}
 
+\begin{notn}
+We will denote a set using ``set notation.'' This consists of listing the
+elements of a set enclosed in braces, and separated by commas. Note that
+the order in which elements are written doesen't change the set. For
+example $\{a, b, c\} = \{b, c, a\}$.
+\end{notn}
+
 \begin{defn}
 For a set $S$, its \Xb{power set} $\ms P(S)$, is the set whose
 elements are the subsets of $S$
@@ -160,6 +168,13 @@ write $s \in \ms S$. We call $S$ the underlying set of $\ms S$.
 For a multiset $\ms S = (S, m)$, we will use the notation $m_{\ms S}$ to
 refer to $m$.
 \end{defn}
+
+\begin{notn}
+We will write a multiset $S$ by writing a list of its elements, with
+repetition, in a string, each elements arising in the string as many times
+as it its multiplicity. The order in which the elements are written
+doesen't matter. For example, $abbbcc = abcbcb$.
+\end{notn}
 
 \begin{defn}
 Let $\ms S$ and $\ms T$ be multisets. We say that $\ms S \subset \ms T$ if
@@ -283,6 +298,48 @@ How many rounds are needed for teams to play each other?
 \item edges = teams who need to play each other
 \end{itemize}
 problem: how many rounds?
+
+\section{Directed graphs}
+
+A variation on the notion of a graph is also very useful both theoretically
+and in applications:
+
+\begin{defn}
+A \Xb{directed graph} or \Ab{digraph}{digraph|see {directed graph}} $D$ is an
+ordered triple $(V, A, \psi)$ where $V$ is a set, referred to as the
+\textbf{vertices} of $D$, a set $A$ referred to as the \Xb{arrows} of $D$,
+and a pair of functions $s, t: A \to V$, taking arrows to
+elements of $V$.
+\end{defn}
+
+\begin{notn}
+For a digraph $D = (V, A, \psi)$, as before, we write $V_D$ for $V$, $A_D$
+for $A$, $s_D$ for $s$, and $t_D$ for $t$.
+\end{notn}
+
+\begin{notn}
+For a digraph $D$, and an arrow $a \in A_D$, we call $s(a)$ the
+\Ab{source}{source (of an arrow)} of $a$ and $t(a)$ the \Ab{target}{target
+(of an arrow)} of $a$.
+\end{notn}
+
+EXAMPLES:
+\begin{itemize}
+\item one way street maps
+\item irreversible processes
+\item dependencies: e.g. scheduling with dependencies
+\end{itemize}
+
+\subsection{From graphs to digraphs and back}
+
+Given a graph $G$, we may construct a digraph $dig(G)$ by definining
+\begin{itemize}
+\item $V_{dig(G)} = V_G$,
+\item $A_{dig(G)} = \{(v, e) \in V \times E | v \in \psi(e)\}$,
+\item $s_{dig(G)}(v, e) = v$, $t_{dig(G)}(v, e) = w$, where $\psi(e) = vw$.
+\end{itemize}
+
+DIGRAPH TO GRAPHS, GRAPHS TO SIMPLE GRAPHS, ETC. EXCERCISES...
 
 \chapter{Subgraphs, new graphs from old}
 

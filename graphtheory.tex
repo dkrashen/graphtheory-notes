@@ -5,10 +5,25 @@
 % package and document formatting stuff
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{amsmath,amsthm,amsfonts,amscd,amssymb,amsopn,mathabx}
-\usepackage{eucal,mathrsfs,makeidx,enumerate}
+% symbols and math stuff
+\usepackage{amsmath,amsthm,amssymb}
 
-\usepackage{fullpage,color}
+% math operators
+\usepackage{amsopn}
+
+% script and caligraphics
+\usepackage{eucal,mathrsfs}
+
+% indexing
+\usepackage{makeidx}
+
+\usepackage{enumerate}
+
+% formatting
+\usepackage{fullpage}
+
+% links and colors
+\usepackage{color}
 \usepackage[pdfstartview=FitH,
 %             pdfauthor={\myauthor},
 %             pdftitle={\mytitle},
@@ -103,7 +118,7 @@
 \newcommand{\todo}[1]{\textcolor{todo}{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% end preamble 
+% end preamble
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -217,9 +232,9 @@ Graphs encode the idea of connections between things, for example
 
 In formal mathematical terms, a graph is:
 \begin{defn}
-A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of 
+A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of
 \begin{itemize}
-\item a set $V$, whose elements are referred to as vertices, 
+\item a set $V$, whose elements are referred to as vertices,
 \item a set $E$, whose elements are referred to as edges, and
 \item an ``incidence'' function $\psi: E \to \ms R_2(V)$,
 \end{itemize}

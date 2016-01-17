@@ -59,6 +59,7 @@
 \newtheorem{conj}[thm]{Conjecture}
 \newtheorem{prop}[thm]{Proposition}
 
+\newtheorem{exercise}[thm]{Excercise}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % typography stuff
@@ -314,6 +315,39 @@ How many rounds are needed for teams to play each other?
 \end{itemize}
 problem: how many rounds?
 
+\section{The rationale behind the language}
+
+The choice of thinking of a graph as a triple $G = (V, E, \psi)$ has its
+advantages and disadvantages. If we were only concerned with simple graphs,
+we could have simplified our notation somewhat by omitting the function
+$\psi$, and letting $E$ itself be a subset of the set of 
+unordered pairs of distinct elements of $V$. In the case of general graphs,
+however, where there can be multiple edges between two vertices, this is
+somewhat less convenient. We could persist with this approach by saying
+that $E$ be a multisubset instead of a subset, however, this is a little
+bit less convenient later when we wish to talk about colorings or
+labellings of edges.
+
+An alternate way of defining things could be as follows: Instead of
+defining the function $\psi$ as the fundamental concept, one may instead
+define the notion of \textbf{adjacency} as the fundamental concept as
+follows:
+
+\begin{defn}
+A griph $G$ is an ordered triple $(V, E, \alpha)$ consisting of a set of
+vertices $V$, a set of edges $E$, and a set of ordered pairs $\alpha
+\subset V \times E$ such that
+\item for every $e \in E$, there is at least one, and at most two elements
+$v \in V$ such that $(v, e) \in \alpha$. If $(v, e) \in \alpha$, we say
+that $v$ is incident to $e$. A griph is called simple if every edge is
+adjacent to exactly two vertices.
+\end{defn}
+
+\begin{exercise}
+Show that griphs are exactly in correspondence with graphs in such a way
+that the relationship of incidence lines up.
+\end{exercise}
+
 \chapter{Lecture 2: Digraphs and degree formulas}
 \section{Directed graphs}
 
@@ -346,7 +380,45 @@ EXAMPLES:
 \item dependencies: e.g. scheduling with dependencies
 \end{itemize}
 
-\subsection{From graphs to digraphs and back}
+\newcommand{\outdeg}{\oper{outdeg}}
+\newcommand{\indeg}{\oper{indeg}}
+
+\begin{defn}
+Let $D$ be a digraph. For a vertex $v$, we define the \Xb{outdegree} of
+$v$, denoted $\outdeg v$, to be the number of edges whose source is $v$,
+and the \Xb{indegree} of $v$, denoted $\indeg v$, to be the number of edges
+whose target is $v$.
+Formall, we have
+\[ \outdeg v = \#\{a \in A_D \mid  s(a) = v\} ,\ \ 
+\indeg v = \#\{a \in A_D \mid t(a) = v\}.
+\]
+If it is necessary to specify the digraph, we may also write $\outdeg_D(v)$
+or $\indeg_D(v)$.
+\end{defn}
+
+\begin{prop}[The degree formula for digraphs]
+Suppose that $D$ is a digraph. Then 
+\[\sum_{v \in V_D} \outdeg(v) = \sum_{v \in V_D} \indeg(v) = \#A_D.\]
+\end{prop}
+\begin{proof}
+Informally, this is clear for the following reason: every arrow in $A_D$
+has its source at exactly one vertex, and so contributes exactly $1$ to the
+first sum, and every arrow has its target at exactly one vertex and
+similarly contributes exactly once to the second sum.
+
+Let us, however, for the sake of practice, give a more formal argument:
+\[\sum_{v \in V_D} \outdeg(v) = \sum_{v \in V_D} \sum_{a \in A_D, s(a) = v}
+1 = \sum_{(v, a) \in V_D \times A_D, s(a) = v} 1 \]
+But now, let us notice that the pairs $(v, a)$ with $s(a) = v$ are in
+bijection with simply the set $A_D$, since by the description, $v$ is
+determined by $a$. Therefore, we may rewrite this as:
+\[\sum_{(v, a) \in V_D \times A_D, s(a) = v} 1  = \sum_{a \in A_D} 1 =
+\#A_D.\]
+The rest of the proof follows in an analogous way.
+
+\end{proof}
+
+\section{From graphs to digraphs}
 
 Given a graph $G$, we may construct a digraph $dig(G)$ by definining
 \begin{itemize}
@@ -355,7 +427,59 @@ Given a graph $G$, we may construct a digraph $dig(G)$ by definining
 \item $s_{dig(G)}(v, e) = v$, $t_{dig(G)}(v, e) = w$, where $\psi(e) = vw$.
 \end{itemize}
 
-DIGRAPH TO GRAPHS, GRAPHS TO SIMPLE GRAPHS, ETC. EXCERCISES...
+\begin{defn}
+Suppose that $G$ is a graph. We define the \Xb{degree} of a vertex $v \in
+V_G$, denoted $\deg v$ to be the number of edges incident to $v$. If it is
+necessary to specify the graph, we may also write $\deg_G v$.
+\end{defn}
+
+\begin{prop}[The degree formula for graphs]
+Suppose that $G$ is any graph. Then we have
+\[\sum_{v \in V_G} \deg v = 2\#E.\]
+\end{prop}
+\begin{proof}
+Intuitively, one way to see this is that if we chop each edge in the
+middle, making two ``half edges'' for every edge, then each half edge is
+incident to exactly one vertex, and contritutes exactly once to the degree
+count on the left.
+
+More formally, if we let $dig(G)$ be the associated digraph to $G$, then we
+note that for every edge of $G$, there are two arrows of $dig(G)$. Also,
+for every edge $e$ incident to $v$, there is exactly one arrow, which we
+call $(v, e)$ which starts at $e$. That is, the map
+\begin{align*}
+\{e \in E_G | \text{$e$ is incident to $v$}\} &\to \{a \in A_{dig(G)} | s(a)
+= v\} \\
+e \mapsto (v, e) 
+\end{align*}
+is a bijection (its inverse being given by $(v, e) \mapsto e$). In
+particular, this says that $\outdeg_{dig(G)} v = \deg_G v$.
+
+By the
+degree formula for digraphs, we therefore have
+\[\sum_{v \in V_G} \deg_G v = \sum_{v \in A_{dig(G)}} \outdeg_{dig(G)} v =
+\#A_{dig(G)} = 2\#E_G\]
+as desired.
+\end{proof}
+
+A surprising conclusion here is that the sum of the degrees of the vertices
+of a graph must be even! 
+
+\chapter{Lecture 2.5: Specific Graphs, Subgraphs, Isomorphisms}
+
+\begin{defn}
+The \Xb{complete graph} on $n$ vertices, denoted $K_n$ is the simple graph
+with vertices consisting of the set $\{1, \ldots, n\}$, edges consisting of
+the set of unordered pairs 
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph. We say that a graph $H$ is a \Xb{subgraph} of a graph $G$ if
+$V_H \subset V_G$, $E_H \subset E_G$ and $\psi_H = \psi_G|_{E_H}$.
+\end{defn}
+
+Given a graph $G$, we will often want to understand its structure by
+looking at which subgraphs it has, and their properties.
 
 \iffalse
 \chapter{Subgraphs, new graphs from old}

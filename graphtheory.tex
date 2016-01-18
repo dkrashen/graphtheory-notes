@@ -59,7 +59,7 @@
 \newtheorem{conj}[thm]{Conjecture}
 \newtheorem{prop}[thm]{Proposition}
 
-\newtheorem{exercise}[thm]{Excercise}
+\newtheorem{exercise}[thm]{Exercise}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % typography stuff
@@ -261,6 +261,11 @@ Let $G$ be a graph, $e \in E_G$ an edge and $v \in V_G$ a vertex. We say
 that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
 \end{defn}
 
+\begin{defn}
+Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are adjacent if
+there is an edge $e$ with both $v$ and $w$ incident to $e$.
+\end{defn}
+
 DIAGRAM
 
 \begin{defn}
@@ -330,17 +335,16 @@ labellings of edges.
 
 An alternate way of defining things could be as follows: Instead of
 defining the function $\psi$ as the fundamental concept, one may instead
-define the notion of \textbf{adjacency} as the fundamental concept as
+define the notion of \textbf{incidence} as the fundamental concept as
 follows:
 
 \begin{defn}
 A griph $G$ is an ordered triple $(V, E, \alpha)$ consisting of a set of
 vertices $V$, a set of edges $E$, and a set of ordered pairs $\alpha
-\subset V \times E$ such that
-\item for every $e \in E$, there is at least one, and at most two elements
-$v \in V$ such that $(v, e) \in \alpha$. If $(v, e) \in \alpha$, we say
-that $v$ is incident to $e$. A griph is called simple if every edge is
-adjacent to exactly two vertices.
+\subset V \times E$ such that \item for every $e \in E$, there is at least
+one, and at most two elements $v \in V$ such that $(v, e) \in \alpha$. If
+$(v, e) \in \alpha$, we say that $v$ is incident to $e$. A griph is called
+simple if every edge is incident to exactly two vertices.
 \end{defn}
 
 \begin{exercise}
@@ -465,21 +469,155 @@ as desired.
 A surprising conclusion here is that the sum of the degrees of the vertices
 of a graph must be even! 
 
-\chapter{Lecture 2.5: Specific Graphs, Subgraphs, Isomorphisms}
+\chapter{Lecture 3: Subgraphs, Isomorphisms}
+
+\section{Isomorphisms}
 
 \begin{defn}
-The \Xb{complete graph} on $n$ vertices, denoted $K_n$ is the simple graph
-with vertices consisting of the set $\{1, \ldots, n\}$, edges consisting of
-the set of unordered pairs 
+Given two graphs $G, H$, an \Xb{isomorphism} $f$ from $G$ to $H$, written
+$f: G \to H$ is a pair of maps $f = (f_V, f_E)$, where $f_V: V_G \to V_H$
+is a function from the vertices of $G$ to the vertices of $H$ and $f_E: E_G
+\to E_H$ is a function from the edges of $G$ to the edges of $H$ such that
+both $f_V$ and $f_E$ are bijective and such that for $v \in V_G$, $e \in
+E_G$, we have that $v$ and $e$ are incident if and only if $f_V(v)$ is
+incident to $f_E(e)$.
+\end{defn}
+
+\begin{notn}
+If $G$ and $H$ are graphs, we write $G \cong H$ and say that $G$ and $H$
+are \textbf{isomorphic}\index{isomorphic graphs} if there exists an
+isomorphism $f: G \to H$.
+\end{notn}
+
+In other words, thinking of the sets $V_G, E_G$ as the labels for the
+vertices and edges of $G$ and thinking of $V_H, E_H$ as the labels for the
+vertices and edges of $H$, we may think of $f_V$ and $f_E$ as re-assigning
+the labels of the vertices and edges of a graph. The final property says
+that the relation of incidence is preserved. Note that the incidence
+relation encodes the function $\psi$, as $v$ and $e$ are incident if and
+only if $v \in \psi(e)$ (and since the unordered pair/two element multiset
+$\psi(e)$ is determined precisely by which elements it contains).
+
+This is very useful, as our main concern is structural information about
+graphs, as opposed to the specific names which we have assigned to their
+edges and vertices.
+
+\subsection{Simplifications for simple graphs}
+It is perhaps useful to note that this definition may be made a bit simpler
+in the case of simple graphs (not suprising, I'm sure). To be precise:
+
+\begin{exercise}
+Suppose that $G$ and $H$ are simple graphs. Suppose we have a bijective
+function $g: V_G \to V_H$. Then there exists a unique graph isomorphism $f
+= (f_V, f_E) : G \to E$ with $f_V = g$ if and only if for every two
+vertices $v, w \in V_G$, we have that $v$ is adjacent to $w$ if and only if
+$g(v)$ is adjacent to $g(w)$.
+\end{exercise}
+
+Expanding on this idea a bit, we see that in a simple graph, the graph is
+determined up to isomorphism by the relationship of adjacency -- that is,
+which vertices are joined by an edge. That is to say, although these two
+graphs shown below are different as graphs:
+
+TWO GRAPHS WITH THE SAME LABELS ON VERTICES BUT DIFFERENT LABELS ON EDGES,
+
+they are still isomorphic in a canonical way. 
+
+\begin{notn}
+Along the same lines, for a
+simple graph $G = (V, E, \psi)$, if $e$ is an edge with $\psi(e) = vw$, we
+will abuse language and refer to $vw$ as $e$. In other words, the statement
+that for a pair of vertices $v, w \in V$, $vw \in E$ means that there is
+some edge $e$ with $\psi(e) = vw$, or equivalently $v$ and $w$ are
+adjacent.
+\end{notn}
+
+\section{Subgraphs}
+
+\begin{defn}
+Let $G$ be a graph. We say that a graph $H$ is a \Xb{subgraph} of a graph
+$G$ if $V_H \subset V_G$, $E_H \subset E_G$ and $\psi_H = \psi_G|_{E_H}$.
+If $H$ is a subgraph of $G$, we write $H \subset G$.
 \end{defn}
 
 \begin{defn}
-Let $G$ be a graph. We say that a graph $H$ is a \Xb{subgraph} of a graph $G$ if
-$V_H \subset V_G$, $E_H \subset E_G$ and $\psi_H = \psi_G|_{E_H}$.
+Let $G$ be a graph, and $W \subset V_G$ a subset of its vertices. We
+define a new graph $G[W]$, called \textbf{the subgraph of $G$ induced by
+$W$}\index{induced subgraph}, to be the graph whose vertex set is $W$ and
+whose edge set $E_{G[W]}$ consists of all the edges of $G$ which are only
+incident to vertices in $W$, together with the same incidence relations.
+Formally, we set
+\[ V_{G[W]} = W, \ E_{G[W]} = \{ e \in E_G \mid \psi(e) \subset W\}, \
+\psi_{G[W]} = \psi|_{E_{G[W]}},\]
+where $\psi|_{E_{G[W]}}$ denotes the restriction of the function $\psi$ to
+the edges of $G[W]$.
 \end{defn}
 
 Given a graph $G$, we will often want to understand its structure by
-looking at which subgraphs it has, and their properties.
+looking at which subgraphs it has, and their properties. For example,
+consider the following famous statement:
+
+\begin{quote}
+In every group of $6$ people, there is either a group of $3$ people all of
+whom know each other, or a group of $3$ people, none of whom know each
+other.
+\end{quote}
+
+One convenient way of conceptualizing this question within the framework of
+graph theory is as follows: consider the two special graphs below
+
+TRIANGLE   \ \ \ \ \ \ DISCRETE GRAPH WITH 3 VERTICES
+
+We may now formally state the previous result as follows:
+
+\begin{exercise}
+Show that every simple graph with $6$ vertices must contain an induced
+subgraph isomorphic to one of the above graphs\footnote{hint: as a first
+step, considering
+the friends of one particular person $A$, partitions the other $5$ people into
+two groups (friends of $A$ and not friends of $A$), it follows that one of
+these two groups must have at least $3$ people}.
+\end{exercise}
+
+In generalizing this result, which we will look into later in
+Chapter~\ref{ramsey chapter}, it is natural to want to consider groups of
+$n$ vertices in a graph, all of which are connected. The correponding
+subgraphs of interest are called the complete graphs:
+
+\begin{defn}
+The \Xb{complete graph} on $n$ vertices, denoted $K_n$ is the simple graph
+with vertices consisting of the set $\{1, \ldots, n\}$, and where every two
+vertices are adjacent.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a simple graph. An $n$-\Xb{clique} in $G$ is a collection of
+vertices $v_1, \ldots, v_n \in V_G$ such that the induced subgraph
+$G[\{v_1, \ldots, v_n\}]$ is isomorphic to $K_n$.
+\end{defn}
+
+It is very natural to ask, for a given graph, about the existence or
+non-existence of cliques of a given size.
+
+\begin{exercise}
+Find the smallest number $n$ such that every simple graph with $n$ edges
+and $6$ vertices has a $3$-clique.
+\end{exercise}
+
+Another way to generalize the graph $K_3$ is in the notion of a cycle graph:
+\begin{defn}
+The \Xb{cycle graph} on $n$ vertices ($n \geq 3$)\footnote{we let bigons be
+bigons, as they say}, denoted $C_n$ is the simple graph with vertices
+consisting of the set $\{1, \ldots, n\}$, and where vertices $i$ and $j$
+are adjacent if and only if $|i - j|$ is $1$ or $n-1$.
+\end{defn}
+In other words, there are edges between vertices which are $1$ unit apart,
+and one additional edge connecting $1$ and $n$.
+
+\begin{defn}
+A cycle in a (not necessarily simple) graph $G$ is a subgraph $C \subset G$
+such that $C \cong C_n$ for some $n \geq 3$.
+\end{defn}
 
 \iffalse
 \chapter{Subgraphs, new graphs from old}

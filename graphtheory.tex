@@ -140,85 +140,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\chapter{Lecture 1: Basic Notions}
-
-\section{Preliminaries and notation}
-
-The substructure of the majority of modern mathematics is set theory. It
-therefore would behoove us to take a very slight digression into some
-useful concepts and notations.
-
-\begin{defn}
-A \Xb{set} is a collection of elements, is defined exactly by its elements.
-Two sets are equal if they contain the same elements.
-\end{defn}
-
-\begin{notn}
-We will denote a set using ``set notation.'' This consists of listing the
-elements of a set enclosed in braces, and separated by commas. Note that
-the order in which elements are written doesen't change the set. For
-example $\{a, b, c\} = \{b, c, a\}$.
-\end{notn}
-
-\begin{defn}
-For a set $S$, its \Xb{power set} $\ms P(S)$, is the set whose
-elements are the subsets of $S$
-\end{defn}
-
-\begin{defn}
-For a set $S$, we let $\ms P_k(S)$ denote its subsets with exactly $k$
-elements.
-\end{defn}
-
-\begin{defn}
-For sets $S, T$ we let $S \times T$ denote the set whose elements are
-ordered pairs $(s, t)$ where $s \in S$ and $t \in T$.
-\end{defn}
-
-\begin{defn}
-A \Xb{multiset} $\ms S$ is a pair $(S, m)$, where $S$ is a set, and $m$ is a
-function $m: S \to \mathbb Z_{> 0}$ from $S$ to the positive integers. For
-$s \in S$, we refer to $m(s)$ as the multiplicity of $s$ in $\ms S$. We
-write $s \in \ms S$. We call $S$ the underlying set of $\ms S$.
-
-For a multiset $\ms S = (S, m)$, we will use the notation $m_{\ms S}$ to
-refer to $m$.
-\end{defn}
-
-\begin{notn}
-We will write a multiset $S$ by writing a list of its elements, with
-repetition, in a string, each elements arising in the string as many times
-as it its multiplicity. The order in which the elements are written
-doesen't matter. For example, $abbbcc = abcbcb$.
-\end{notn}
-
-\begin{defn}
-Let $\ms S$ and $\ms T$ be multisets. We say that $\ms S \subset \ms T$ if
-the underlying set of $\ms S$ is contained in the underlying set of $\ms
-T$.
-\end{defn}
-
-If $S$ is a set, we will also identify $S$ with the multiset $(S, m)$
-defined by $m(s) = 1$ for each $s \in S$ (that is, $S$ contains each of its
-elements exactly $1$ time).
-
-These mutisets are occasionally useful in combinatorics to think of the
-idea of sampling with replacement/repetition.
-
-\begin{defn}
-If $\ms S = (S, m)$ is a multiset, we define the \Xb{cardinality} of $\ms
-S$, denoted  $\#\ms S$, to be
-\[ \sum_{s \in S} m(s). \]
-\end{defn}
-In particular, considering a set $T$ as a multiset as described above, we
-have $\# T$ is exactly the number of elements of $T$.
-
-\begin{defn} \label{multisubsets definition}
-Let $S$ be a set. We write $\ms R(S)$ to denote the set of all mulisubsets
-of $S$, and $\ms R_k(S)$ the set of all multisubsets of $S$ with
-cardinality exactly $S$.
-\end{defn}
-
+\chapter{Lecture 1: The language of graphs}
 
 \section{Graphs}
 Graphs encode the idea of connections between things, for example
@@ -469,7 +391,7 @@ as desired.
 A surprising conclusion here is that the sum of the degrees of the vertices
 of a graph must be even! 
 
-\chapter{Lecture 3: Subgraphs, Isomorphisms}
+\chapter{Lecture 3: Subgraphs, isomorphisms}
 
 \section{Isomorphisms}
 
@@ -630,6 +552,132 @@ one should view the existence of cycles and cliques as helping to describe
 how highly connected a graph is, somehow encapsulating ``redundancies of
 connections.'' We will explore these ideas more in Chapters~\ref{bridges,
 circuits, etc}.
+
+\appendix
+
+\chapter{Foundational notions}
+
+\section{Sets and multisets}
+
+The substructure of the majority of modern mathematics is set theory. It
+therefore would behoove us to take a very slight digression into some
+useful concepts and notations.
+
+\begin{defn}
+A \Xb{set} is a collection of elements, is defined exactly by its elements.
+Two sets are equal if they contain the same elements.
+\end{defn}
+
+\begin{notn}
+We will denote a set using ``set notation.'' This consists of listing the
+elements of a set enclosed in braces, and separated by commas. Note that
+the order in which elements are written doesen't change the set. For
+example $\{a, b, c\} = \{b, c, a\}$.
+\end{notn}
+
+\begin{defn}
+For a set $S$, its \Xb{power set} $\ms P(S)$, is the set whose
+elements are the subsets of $S$
+\end{defn}
+
+\begin{defn}
+For a set $S$, we let $\ms P_k(S)$ denote its subsets with exactly $k$
+elements.
+\end{defn}
+
+\begin{defn}
+For sets $S, T$ we let $S \times T$ denote the set whose elements are
+ordered pairs $(s, t)$ where $s \in S$ and $t \in T$.
+\end{defn}
+
+\begin{defn}
+A \Xb{multiset} $\ms S$ is a pair $(S, m)$, where $S$ is a set, and $m$ is a
+function $m: S \to \mathbb Z_{> 0}$ from $S$ to the positive integers. For
+$s \in S$, we refer to $m(s)$ as the multiplicity of $s$ in $\ms S$. We
+write $s \in \ms S$. We call $S$ the underlying set of $\ms S$.
+
+For a multiset $\ms S = (S, m)$, we will use the notation $m_{\ms S}$ to
+refer to $m$.
+\end{defn}
+
+\begin{notn}
+We will write a multiset $S$ by writing a list of its elements, with
+repetition, in a string, each elements arising in the string as many times
+as it its multiplicity. The order in which the elements are written
+doesen't matter. For example, $abbbcc = abcbcb$.
+\end{notn}
+
+\begin{defn}
+Let $\ms S$ and $\ms T$ be multisets. We say that $\ms S \subset \ms T$ if
+the underlying set of $\ms S$ is contained in the underlying set of $\ms
+T$.
+\end{defn}
+
+If $S$ is a set, we will also identify $S$ with the multiset $(S, m)$
+defined by $m(s) = 1$ for each $s \in S$ (that is, $S$ contains each of its
+elements exactly $1$ time).
+
+These mutisets are occasionally useful in combinatorics to think of the
+idea of sampling with replacement/repetition.
+
+\begin{defn}
+If $\ms S = (S, m)$ is a multiset, we define the \Xb{cardinality} of $\ms
+S$, denoted  $\#\ms S$, to be
+\[ \sum_{s \in S} m(s). \]
+\end{defn}
+In particular, considering a set $T$ as a multiset as described above, we
+have $\# T$ is exactly the number of elements of $T$.
+
+\begin{defn} \label{multisubsets definition}
+Let $S$ be a set. We write $\ms R(S)$ to denote the set of all mulisubsets
+of $S$, and $\ms R_k(S)$ the set of all multisubsets of $S$ with
+cardinality exactly $S$.
+\end{defn}
+
+
+\section{Relations}
+
+\begin{defn}
+Recall that if $X, Y$ are sets, a \Xb{relation} (from $X$ to $Y$) is a
+subset $R \subset X \times Y$ of the product of $X$ and $Y$. If an ordered
+pair $(x, y) \in R$ we say that $x$ is related to $y$ and write $xRy$.
+\end{defn}
+
+\begin{notn}
+Frequently we will talk about a relation \textit{on a set $X$}. This this
+is shorthand for a relation $R \subset X \times X$ from $X$ to iteself.
+\end{notn}
+
+Two important types of relations are \Xb{functions} and \Xb{equivalence
+relations}, which we now describe.
+
+\subsection{Functions}
+
+\begin{defn}
+A function from $X$ to $Y$ is a relation $f \subset X \times Y$ such that
+for every $x \in X$ there is exactly one $y \in Y$ such that $xfy$. 
+\end{defn}
+
+\begin{notn}
+If $f$ is a function from $x$ to $y$, we write $f(x)$ to denote the unique
+$y \in Y$ such that $xfy$.
+\end{notn}
+
+\subsection{Equivalence Relations}
+
+\begin{defn}
+Let $R$ be a relation on $X$. We say that $R$ is an \textbf{equivalence
+relation}, if the following properties hold
+\begin{enumerate}
+\item(\textit{reflexivity})
+  for every $x \in X$, we have $xRx$,
+\item(\textit{symmetry})
+  for every $x, y \in X$, we have $xRy$ if and only if $yRx$,
+\item(\textit{transitivity})
+  for every $x, y, z \in X$, whenever $xRy$ and $yRz$ we must also
+  have $xRz$.
+\end{enumerate}
+\end{defn}
 
 \iffalse
 \chapter{Subgraphs, new graphs from old}

@@ -184,8 +184,9 @@ that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
 \end{defn}
 
 \begin{defn}
-Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are adjacent if
-there is an edge $e$ with both $v$ and $w$ incident to $e$.
+Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are
+\Xb{adjacent} if there is an edge $e$ with both $v$ and $w$ incident to
+$e$.
 \end{defn}
 
 DIAGRAM
@@ -357,6 +358,10 @@ Given a graph $G$, we may construct a digraph $dig(G)$ by definining
 Suppose that $G$ is a graph. We define the \Xb{degree} of a vertex $v \in
 V_G$, denoted $\deg v$ to be the number of edges incident to $v$. If it is
 necessary to specify the graph, we may also write $\deg_G v$.
+\end{defn}
+
+\begin{defn}
+We say that a graph $G$ is $k$-\textbf{regular}\index{graph!regular} if every vertex of 
 \end{defn}
 
 \begin{prop}[The degree formula for graphs]
@@ -552,6 +557,58 @@ one should view the existence of cycles and cliques as helping to describe
 how highly connected a graph is, somehow encapsulating ``redundancies of
 connections.'' We will explore these ideas more in Chapters~\ref{bridges,
 circuits, etc}.
+
+\section{Unions, Intersections}
+
+\begin{defn}
+Let $G$ be a graph and $H_1, H_2$ sugraphs of $G$. We say that $G$ is the
+\textbf{union}\index{union (of graphs)} of $H_1$ and $H_2$, and write $G = H_1
+\cup H_2$ if $V_G = V_{H_1} \cup V_{H_2}$ and $E_G = E_{H_1} \cup
+E_{H_2}$. We say that the union is \textbf{disjoint}\index{union!disjoint}
+if $V_{H_1} \cap V_{H_2} = \emptyset$, and we say that the union is
+\textbf{edge disjoint}\index{union!edge disjoint} if $E_{H_1} \cap
+E_{H_2} = \emptyset$.
+\end{defn}
+Note that a disjoint union is automatically edge disjoint as well, since if
+two subgraphs share a common edge it must also share any vertices which are
+incident to it. Note also that whenever we have any two subgraphs $H_1,
+H_2$ in a graph $G$, we may find a unique subgraph $H < G$ with $H = H_1
+\cup H_2$. 
+
+\begin{defn}
+Let $G$ be a graph and $H_1, H_2 < G$ subgraphs of $G$. We define the
+\textbf{intersection}\index{intersection (of graphs)} $H_1 \cap
+H_2$ to be the subgraph with $V_{H_1 \cap H_2} = V_{H_1} \cap V_{H_2}$ and
+$E_{H_1 \cap H_2} = E_{H_1} \cap E_{H_2}$. 
+\end{defn}
+
+\begin{exercise}
+Verify that this definition does in fact give a well-defined subgraph of
+$G$.
+\end{exercise}
+
+\chapter{Lecture 4: Paths, walks, trails, circuits, cycles}
+
+This chapter will introduce a fair amount of language which will be useful
+in subsequent lectures. 
+
+\begin{defn}
+walk: sequence of vertices and edges (or just vertices if simple)
+\end{defn}
+
+concatenation, inversion, $(v, w)$-walk
+
+connectedness
+
+\begin{exercise}
+Define a relation on the vertices of a graph $G$ by saying that $v \sim w$
+if and only if there exists a $(v, w)$-walk in $G$. Show that this gives an
+equivalece relation.
+\end{exercise}
+
+\begin{defn}
+connected component
+\end{defn}
 
 \appendix
 

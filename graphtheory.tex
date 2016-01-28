@@ -50,6 +50,7 @@
 \newtheorem{defn}[thm]{Definition}
 \newtheorem{deflem}[thm]{Definition/Lemma}
 \newtheorem{notn}[thm]{Notation}
+\newtheorem{convention}[thm]{Convention}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{aside}[thm]{Aside}
 \newtheorem{rem}[thm]{Remark}
@@ -60,6 +61,7 @@
 \newtheorem{prop}[thm]{Proposition}
 
 \newtheorem{exercise}[thm]{Exercise}
+\newtheorem{question}[thm]{Question}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % typography stuff
@@ -139,6 +141,12 @@
 % document stuff
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\chapter*{Version Notes}
+\addcontentsline{toc}{chapter}{Version Notes}
+
+\section{Updates 1/28/2016}
+
+
 
 \chapter{Lecture 1: The language of graphs}
 
@@ -157,8 +165,9 @@ In formal mathematical terms, a graph is:
 \begin{defn}
 A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of
 \begin{itemize}
-\item a set $V$, whose elements are referred to as vertices,
-\item a set $E$, whose elements are referred to as edges, and
+\item a finite, nonempty set $V$, whose elements are referred to as vertices,
+\item a finite (possibly empty) set $E$, whose elements are referred to as
+edges, and
 \item an ``incidence'' function $\psi: E \to \ms R_2(V)$,
 \end{itemize}
 where $\ms R_2(V)$ is the set of unordered pairs of elements of $V$ (which
@@ -185,8 +194,14 @@ that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
 
 \begin{defn}
 Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are
-\Xb{adjacent} if there is an edge $e$ with both $v$ and $w$ incident to
+\Xb{adjacent} if there is an edge $e$ with $v$ and $w$ incident to
 $e$.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph $e, e' \in E_G$. We say that $e$ and $e'$ are
+\Xb{adjacent} if there is a vertex $v$ with $e$ and $e'$ incident to
+$v$.
 \end{defn}
 
 DIAGRAM
@@ -231,6 +246,17 @@ Similar problem: table arrangements at a wedding
 problem: how many tables?
 
 translation: vertex colorings, chromatic number of a graph
+\begin{defn}
+A \Xb{vertex coloring} of a graph $G$ is a function $f$ defined on the set of
+vertices of $G$. An vertex $n$-coloring is a function $f : V_G \to \{1,
+\ldots, n\}$. We say that a vertex coloring is \Xb{proper}{proper!vertex
+coloring} if $f(v) \neq f(w)$ for adjacent vertices $v, w$.
+\end{defn}
+
+\begin{defn}
+The chromatic number of a graph, $\chi(G)$, is the minimal number $n$ such
+that $G$ has a proper vertex $n$-coloring.
+\end{defn}
 
 \subsection{Tournaments}
 
@@ -242,6 +268,18 @@ How many rounds are needed for teams to play each other?
 \item edges = teams who need to play each other
 \end{itemize}
 problem: how many rounds?
+
+\begin{defn}
+An \Xb{edge coloring} of a graph $G$ is a function $f$ defined on the set of
+edges of $G$. An edge $n$-coloring is a function $f : E_G \to \{1,
+\ldots, n\}$. We say that an edge coloring is \Xb{proper}{proper!edge
+coloring} if $f(e) \neq f(e')$ for adjacent vertices $e, e'$.
+\end{defn}
+
+\begin{defn}
+The \Xb{edge chromatic number} of a graph, $\chi'(G)$, is the minimal
+number $n$ such that $G$ has a proper edge $n$-coloring.
+\end{defn}
 
 \section{The rationale behind the language}
 
@@ -274,6 +312,13 @@ simple if every edge is incident to exactly two vertices.
 Show that griphs are exactly in correspondence with graphs in such a way
 that the relationship of incidence lines up.
 \end{exercise}
+
+\section{Other basic notions}
+
+For a graph $G$, we let $v(G) = \#V_G$ denote the number of vertices of
+$G$, and $e(G) = \#E_G$ denote the number of edges of $G$. We let
+$\delta(G)$ denote the mininum degree of a vertex of $G$, and $\Delta(G)$
+denote the maximum degree of a vertex.
 
 \chapter{Lecture 2: Digraphs and degree formulas}
 \section{Directed graphs}
@@ -595,28 +640,362 @@ Verify that this definition does in fact give a well-defined subgraph of
 $G$.
 \end{exercise}
 
+\section{Other operations on graphs}
+
+\begin{defn}
+Let $G$ be a graph, and $e \in E_G$. We define a subgraph $G - e$ of $G$ by
+$V_{G - e} = V_G$ and $E_{G - e} = E_G \setminus \{e\}$.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph, and $v \in V_G$. We define the subgraph $G - v$ of $G$
+to be the induced subgraph $G - v = G[V \setminus \{v \}$. That is, it is
+the graph obtained by removing the vertex $v$ as well as all edges incident
+to $v$.
+\end{defn}
+
 \chapter{Lecture 4: Paths, walks, trails, circuits, cycles}
+
+\section{Walks and connectedness}
 
 This chapter will introduce a fair amount of language which will be useful
 in subsequent lectures. 
 
 \begin{defn}
-walk: sequence of vertices and edges (or just vertices if simple)
+A \Xb{walk} $W$ in a graph $G$ is a sequence of alternating vertices and
+edges
+\[ W = v_1 e_2 v_2 e_3 v_3 \cdots e_n v_n \]
+where $v_1, \ldots, v_n \in V_G$, $e_2, \ldots, e_n \in E_G$, and such that
+$e_i$ is incident to the vertices $v_{i-1}$ and $v_i$. The vertex $v_1$ is
+called the \textbf{origin}\index{origin (of a walk)} and $v_n$ is called
+the \textbf{terminus}\index{terminus (of a walk)}.
 \end{defn}
 
-concatenation, inversion, $(v, w)$-walk
+\begin{convention}
+We will allow a walk to have only a single vertex. That is, the sequence
+consisting only of a single vertex $v$ is a valid walk with origin and
+terminus $v$. We will not allow a walk to be empty, however.
+\end{convention}
 
-connectedness
+\begin{notn}
+It is easy to see that if $G$ is a simple graph, a walk $W = v_1 e_2 \cdots
+e_n v_n$ is completely determined by its list of vertices. For this reason,
+if $G$ is simple, we will generally write $W = v_1 v_2 \cdots v_n$ for
+convenience.
+\end{notn}
+
+\begin{defn}
+Let $G$ be a graph, $v, w \in V_G$. A $(v, w)$-walk is a walk with origin
+$v$ and terminus $w$.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph, $W = v_1 e_2 \cdots e_n v_n$ and $W' = v_1' e_2' \cdots
+e_m' v_m'$ walks with $v_n = v_1'$. We define the concatenation $WW'$ of
+the two walks to be the $(v_1,v_m')$ walk defined by the sequence
+\[v_1 e_2 \cdots e_n v_n e_2' v_2' \cdots e_m' v_m \]
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph, and $W = v_1 e_2 \cdots e_n v_n$ a walk. We define the
+reverse of $W$, denoted $W^{-1}$ to be the walk $v_n e_n v_{n-1} \cdots e_2
+v_1$.
+\end{defn}
 
 \begin{exercise}
 Define a relation on the vertices of a graph $G$ by saying that $v \sim w$
 if and only if there exists a $(v, w)$-walk in $G$. Show that this gives an
-equivalece relation.
+equivalence relation.
 \end{exercise}
 
+In this way, we find that the set $V_G$ of vertices of $G$ can be written
+as a disjoint union of equivalence classes $V_G = \bigcup_{i = 1}^n V_i$.
+
 \begin{defn}
-connected component
+The induced subgraphs $G[V_i]$ are called the \Xb{components} of $G$. The
+number $n$ of components of $G$ is denoted $c(G)$. We say that a graph $G$
+is \Xb{connected} if it has a single component.
 \end{defn}
+
+Note that a graph is a disjoint union of its components, $G = \bigcup_{i =
+1}^{c(G)} G[V_i]$.
+
+\begin{exercise}
+Show that $G$ is connected if and only if we cannot find nonempty subgraphs
+$H_1, H_2$ such that $G$ is a disjoint union of $H_1$ and $H_2$.
+\end{exercise}
+
+\begin{exercise} \label{components exercise}
+Somewhat more generally, show that 
+\begin{enumerate}[1. ]
+\item $c(G)$ is the maximum number such that
+we may write $G$ as a disjoint union $G = \cup_{i = 1}^{c(G)} G_i$.
+\item If we have $G = \cup_{i = 1}^n G_i$ a disjoint union, where each
+subgraph $G_i$ is connected, then the $G_i$ are the connected components of
+$G$ and $n = c(G)$. 
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise} \label{leaf doesn't change components}
+Suppose $G$ is a graph and $v \in V_G$ with $\deg(v) = 1$. Then $c(G) = c(G
+- v)$.
+\end{exercise}
+
+\subsection{Bridges}
+
+\begin{defn}
+We say that $e \in E_G$ is a bridge if $c(G - e) > c(G)$.
+\end{defn}
+
+\begin{lem} \label{components plus 1}
+Suppose that $e$ is a bridge. Then $c(G - e) = c(G) + 1$.
+\end{lem}
+\begin{proof}
+Let us begin with the case that $c(G) = 1$.  It is easy to see that if $e$
+is a bridge, then it cannot be a loop.  In paticular, it is incident to two
+distinct vertices $v_1, v_2$.  It is also clear that $e$ must be the unique
+edge connecting its two incident vertices.  Let $G_1$ be the connected
+component of $v_1$ in $G - e$ and $G_2$ be the connected component of $G_2$
+in $G - e$. We claim that $G - e$ is the disjoint union of $G_1$ and $G_2$,
+which would prove that $c(G) = 2$ as desired. 
+
+First, we note that $G_1$ and $G_2$ are disjoint, since they consist of
+vertices from distinct equivalence clases. Therefore, we need only to show
+that every vertex and edge of $G - e$ is either in $G_1$ or $G_2$. 
+
+Let us begin with the vertices. Let $w \in V_G = V_{G - e}$. By
+Lemma~\ref{walk to path}, since $G$ is connected, we can find a $(w,
+v_1)$-path in $G$.
+
+If $v_2$ arises in this path, then looking at the first part of the path up
+to $v_2$ gives a $(w, v_2)$-path in $G$ which does not involve the vertex
+$v_1$. In particular, the edge $e$ cannot arise in this path. Therefore,
+this path is actually a $(w, v_2)$-path within the connected component of
+$v_2$ in $G - e$. That is, we have shown that $w \in V_2$. 
+
+On the other hand, if $v_2$ doesn't arise in this path, the $(w, v_1)$-path
+cannot involve the edge $e$, and in particular, shows that $w$ is in $V_1$.
+
+Finally, we check that the every edge of $G - e$ is either in $G_1$ or
+$G_2$. Given such an edge $e' \in E_{G - e}$, suppose $v$ is incident to
+$e'$. By the above, $v$ is in $G_1$ or $G_2$. Let us suppose that $v \in
+V_{G_1}$. Let $w$ be the other (not necessarily distinct) vertex incident
+to $e$. We cannot have $w \in V_{G_2}$ since in this case we would have $w
+\sim v$, but by definition, they are in different components. Therefore
+both of the incident vertices for $e'$ lie in the same component $G_1$, and
+by definition of the induced subgraph, the edge $e'$ is in $G_1$ as well.
+
+To complete the proof, consider the case that $G$ may not be connected. In
+this case, write $G = \bigcup_{i = 1}^{c(G)} G_i$ as a disjoint union of its
+components (as in Exercise~\ref{components exercise}). Then the edge $e$
+lies in some particular component, say $e \in G_1$. We have a disjoint
+union:
+\[ G - e = (G_1 - e) \cup \bigcup_{i = 2}^{c(G)} G_i, \]
+and by the above, either $c(G_1 - e)$ is $1$ or $2$. If it is $1$, then
+$G_1 - e$ is connected, and $c(G - e) = c(G)$ by Exercise~\ref{components
+exercise}.  If it is $2$, then again by Exercise~\ref{components exercise},
+we have $c(G - e) = c(G) + 1$.
+\end{proof}
+
+\section{Trails, paths, cycles, circuits}
+
+\begin{defn}
+A walk $W = v_1 e_2 v_2 \cdots e_n v_n$ in a graph $G$ is called a
+\Xb{trail} if all the edges $e_i$ are distinct. It is called a \Xb{path} if
+all the vertices $v_i$ are distinct.
+\end{defn}
+Note that paths are also nessarily trails.
+
+\begin{lem}
+Let $v, w$ be vertices of a graph $G$. Suppose that there is a $(v,w)$-walk
+in $G$. Then there is a $(v,w)$-path in $G$.
+\end{lem}
+\begin{proof}
+Suppose that $W = v_1 e_2 v_2 \cdots e_n v_n$ is a walk with $v_1 = v$ and
+$v_n = w$. Choose $W$ of minimal length. We claim that $W$ is a path.
+Supposing it is not, we would have $v_i = v_j$ for some $i < j$. But in
+this case, we may consider the new walk $W' = v_1 e_2 \cdots e_{i-1}
+v_{i-1} v_i e_{j+1} v_{j+1} \cdots e_n v_n$. By assumption, this is a
+shorter walk, contradicting the minimality of $W$. Therefore $W$ is a path
+as claimed.
+\end{proof}
+
+\begin{defn}
+A walk is called \textbf{closed}\index{walk!closed} is its origin and
+terminus coincide. A closed walk $W = v_1 e_2 v_2 \cdots e_n v_n e_{n+1}
+v_1$ is called a \Xb{circuit} when $v_1 e_2 v_2 \cdots v_n$ is a trail,
+and it is called a \Xb{cycle} when $v_1 e_2 v_2 \cdots v_n$ is a path.
+\end{defn}
+
+Note here that there is some notational ambiguity here, as we have defined
+a cycle to both be a subgraph isomorphic to $C_n$, as well as a particular
+type of walk. Of course the connection is that if $v_1 e_2 v_2 \cdots
+e_{n+1} v_1$ is a cycle, then the vertices $v_1, v_2, \ldots, v_n$
+together with the edges $e_2, e_3, \ldots, e_{n+1}$ give a subgraph isomorphic
+to $C_n$.
+
+\chapter{Lecture 5: Spanning subgraphs}
+
+\begin{defn}
+Let $H$ be a subgraph of $G$. We say that $H$ is a \Xb{spanning subgraph}
+if $V_H = V_G$.
+\end{defn}
+
+In this lecture we will consider spanning subgraphs of various types. These
+play a very important role for a variety of reasons.
+
+\section{Trees}
+
+\begin{defn}
+We say that a simple graph $G$ is a \Xb{forest}, if it has no cycles; that
+is, if it has no subgraphs which are isomorphic to $C_n$, $n \geq 3$.
+\end{defn}
+
+\begin{defn}
+A \Xb{tree} is a connected forest.
+\end{defn}
+
+\begin{defn}
+A vertex of degree $1$ in a tree is called a \Xb{leaf}.
+\end{defn}
+
+
+\begin{lem} \label{tree unique path}
+A graph $G$ is a tree if and only if there is a unique $(v, w)$-path
+between any two vertices.
+\end{lem}
+
+\begin{lem}
+If $G$ is a tree then $e(G) + 1 = v(G)$.
+\end{lem}
+We will later see that the converse of this statement is true as well for a
+connected graph.
+\begin{proof}
+Let us first show that this equality holds for all trees. Assuming first
+that it doesn't, we may find a tree $T$ with a minimum number of edges such
+that the equality doesn't hold. Of course, we can easily see that a
+counterexample would have to have at least one edge $e$. Consider the new
+graph $T - e$. This graph cannot be connected: if $v, w$ are the vertices
+incident to $e$, then in $T$, since $v e w$ is a path from $v$ to $w$, it
+is the unique one. But if $T -  e$ were connected, a $(v, w)$-path in $T -
+e$ would give a $(v, w)$-path in $T$ which didn't involve $e$,
+contradicting uniqueness.
+
+We therefore have by Lemma~\ref{components plus 1} that $T - e$ is a
+disjoint union of two connected graphs $T - e = T_1 \cup T_2$. Since $T -
+e$ is acyclic, $T_1, T_2$ must be as well, and therefore they are both
+trees. By assumption of minimality of $T$, it follows that we have $e(T_1)
++ 1 = v(T_1)$ and $e(T_2) + 1 = v(T_2)$. But therefore we have
+\[ e(T) + 1 = \big(e(T_1) + e(T_2) + 1\big) + 1 = e(T_1) + 1 + e(T_2) +
+1 = v(T_1) + v(T_2) = v(T) \]
+as desired.
+\end{proof}
+
+\subsection{Spanning trees and Dijkstra's algorithm}
+
+Consider the following problem. Given a list of cities $c_1, c_2, \ldots,
+c_n$ and routes connecting certain cities, find the shortest route between
+two given cities $c_i$ and $c_j$.
+
+We can model this problem by letting the cities correspond to vertices of a
+graph $G$, and by letting the routes be the edges. To keep track of
+distances, we add the extra information of some ``cost function:''
+\[ w: E_G \to \mathbb R_{\geq 0}\]
+
+We may then ask the following question:
+\begin{question}
+Given vertices $v, w \in V_G$, how do we find the shortest path between $v$
+an $w$.
+\end{question}
+In practical sitations, particularly when the number of cities and paths is
+fairly large, it is not going to be effective to simply start listing paths
+in a brute force way. One should also consider how the information of the
+graph should be stored and accessed, for example on a computer. For
+example, if we represent the graph as a triple, as we have previously
+defined, this is not going to be particularly practical from the standpoint
+of implementation. For example, suppose we are starting at a vertex $v$ and
+would like to start constructing our path. We would first have to start to
+look down our list of edges, and for every edge $e$, check and see whether
+or not $v$ is incident to $e$, using the incidence function $\psi$. This is
+a great deal of work to do for every edge in the graph. Instead, it would
+be significantly more 
+practical for this type of application to represent the graph as a list
+of tuples $L_v = (v, (e_1, v_1), (e_2, v_2), \ldots, (e_n, v_n))$, where the
+$e_i$ are the edges incident to $v$, and where $v, v_i$ are the vertices
+incident to $e_i$. In this way, starting from a vertex $v$, would mean
+starting with the list $L_v$, and being able to immediately access all
+incident edges, and look up the corresponding adjacent vertex in order to
+continue to build the path.
+
+Let us not describe how to solve this problem. Starting from a vertex $v$,
+if we are searching for paths to eventually get to $w$, we will, in the
+process, successively build paths in various directions from $v$, finding
+minimal length paths to various other vertices in the graph, until we
+eventually reach our desired vertex $w$. In particular, the algorithm
+really will construct minimal length paths from a fixed starting vertex $v$
+to \textit{all} other vertices of the graph. We are free, however, to stop
+the process once we have constructed a path to $w$.
+
+How does this all relate to trees? Well, implicit in the process, we will
+be constructing \textit{unique} paths from $v$ to every other vertex,
+inductively. This will in fact result in building a spanning subgraph of
+$G$ which will contain a unique path from $v$ to every other vertex. It
+will follow quickly from Lemma~\ref{tree unique path}, that the resulting
+spanning subgraph will in fact be a tree. In this way, one can see spanning
+trees as giving maps of efficient ways to traverse a graph, from a fixed
+starting point.
+
+\subsubsection{the algorithm}
+
+We will successsively build up a data set, which will consist of a list of
+all vertices we have mapped minimal paths to, and the cost of the path.
+We'll call this list $C$ and it will start with just the pair $(v, 0)$ --
+the path from $v$ to $v$, consisting of no edges, has a cost of $0$. At
+every step, we will let 
+\begin{itemize}
+\item
+$S \subset V_G$ denote the set of vertices arising
+in $C$, whose cost has been calculated, 
+\item $S^c$ will be the complement of
+$S$ in $V_G$
+\item $N = \{ v' \in S^c \mid \text{ $v$ is adjacent to some $u \in S$}\}$.
+\end{itemize}
+
+We proceed as follows:
+\begin{enumerate} [ 1. ]
+\item choose 
+\end{enumerate}
+
+\section{Regular graphs}
+
+\begin{defn}
+A graph $G$ is called $k$-\Xb{regular} if every vertex $v \in V_G$ has
+degree $k$.
+\end{defn}
+
+Let's examine $k$ regular simple graphs for small values of $k$. For example, a
+$0$-regular graph is graph with no edges (just isolated vertices).
+
+A connected $1$-regular graph is easily seen to consist just of two
+vertices joined by a single edge. It follows that a general $1$-regular
+graph, being a disjoint union of its components. It follows that for a
+graph $G$, a $1$-regular spanning subgraph $H$ corresponds to what is
+called a \Xb{matching}, namely, a way of writing the set of vertices $V_G$
+as a disjoint union $V_G = \bigcup P_i$ where each $P_i$ is a pair of
+distinct adjacent vertices. 
+
+\begin{lem}
+A connected $2$-regular simple graph is isomorphic to a cycle graph $C_n$
+for some $n$.
+\end{lem}
+
+\begin{defn}
+A Hamiltonian cycle in a graph $G$ is a cycle which passes through each
+vertex of $G$.
+\end{defn}
+
+We see that a connected $2$-regular spanning subgraph of a graph $G$,
+corresponds to a Hamiltonian cycle. 
 
 \appendix
 
@@ -744,14 +1123,6 @@ relation}, if the following properties hold
 \end{enumerate}
 \end{defn}
 
-\iffalse
-\chapter{Subgraphs, new graphs from old}
-
-\chapter{Proofs and formality}
-
-\chapter{Spanning subgraphs and applications}
-
-\fi
 %\bibliographystyle{alpha}
 %\bibliography{citations}
 \printindex

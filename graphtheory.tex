@@ -648,6 +648,14 @@ $V_{G - e} = V_G$ and $E_{G - e} = E_G \setminus \{e\}$.
 \end{defn}
 
 \begin{defn}
+Let $G$ be a graph, and $e \in E_G$. If $H < G$ is a subgraph, we define
+the new subgraph $H + e$ to be the subgraph with
+\[V_{H + e} = V_H \cup \{v \in G | \text{ $v$ incident to $e$}\}\]
+and
+\[E_{H + e} = E_H \cup \{e\}\]
+\end{defn}
+
+\begin{defn}
 Let $G$ be a graph, and $v \in V_G$. We define the subgraph $G - v$ of $G$
 to be the induced subgraph $G - v = G[V \setminus \{v \}$. That is, it is
 the graph obtained by removing the vertex $v$ as well as all edges incident
@@ -865,7 +873,7 @@ A graph $G$ is a tree if and only if there is a unique $(v, w)$-path
 between any two vertices.
 \end{lem}
 
-\begin{lem}
+\begin{lem} \label{tree count lem}
 If $G$ is a tree then $e(G) + 1 = v(G)$.
 \end{lem}
 We will later see that the converse of this statement is true as well for a
@@ -898,7 +906,7 @@ c_n$ and routes connecting certain cities, find the shortest route between
 two given cities $c_i$ and $c_j$.
 
 We can model this problem by letting the cities correspond to vertices of a
-graph $G$, and by letting the routes be the edges. To keep track of
+connected graph $G$, and by letting the routes be the edges. To keep track of
 distances, we add the extra information of some ``cost function:''
 \[ w: E_G \to \mathbb R_{\geq 0}\]
 
@@ -945,26 +953,85 @@ spanning subgraph will in fact be a tree. In this way, one can see spanning
 trees as giving maps of efficient ways to traverse a graph, from a fixed
 starting point.
 
+For a walk $W = v_1 e_2 v_2 \cdots e_n v_n$ in $G$, we define the length of
+$W$ to be
+\[\ell(W) = \sum_{i = 2}^n w(e_n).\]
+For vertices $u, u' \in V_G$, let $d(u, u')$ be the distance between $u$
+and $u'$. That is, 
+\[d(u, u')= \min\{ \ell(W) \mid W \text{ is a $(u,u')$-walk} \}\]
+
+In this language our goal will be to construct, for a given $v, w$, a $(v,
+w)$-walk $W$ such that $\ell(W) = d(v, w)$. Of course such a walk will
+necessarily be a path.
+
 \subsubsection{the algorithm}
 
-We will successsively build up a data set, which will consist of a list of
-all vertices we have mapped minimal paths to, and the cost of the path.
-We'll call this list $C$ and it will start with just the pair $(v, 0)$ --
-the path from $v$ to $v$, consisting of no edges, has a cost of $0$. At
-every step, we will let 
-\begin{itemize}
-\item
-$S \subset V_G$ denote the set of vertices arising
-in $C$, whose cost has been calculated, 
-\item $S^c$ will be the complement of
-$S$ in $V_G$
-\item $N = \{ v' \in S^c \mid \text{ $v$ is adjacent to some $u \in S$}\}$.
-\end{itemize}
+We will successsively build up a data set, which will consist of a subgraph
+$T \subset G$, together with the value $d(v, t)$ computed for each $t \in
+V_T$, and such that there will be a unique $(v, t)$-path $W$ in $T$ (which we
+will have, in the process of the algorithm, also computed), such that $\ell(W)
+= d(v, t)$.
 
-We proceed as follows:
+For a given subgraph $T$, we will let
+\[N(T)^\circ = \{u \in V_G \setminus V_T \mid \text{$u$ is adjacent to some
+vertex $u' \in V_T$}\}.\]
+
+\begin{rem} \label{tree degree count}
+For future reference, let us notice that the algorithm below constructs a
+sequence of subgraphs $T_0, T_1, \ldots$ each having $v(T_i) = e(T_i) + 1$.
+\end{rem}
+
+\noindent
+We proceed as follows: 
 \begin{enumerate} [ 1. ]
-\item choose 
+\item begin with $T_0$ as the subgraph of $G$ consisting
+only of the single vertex $v$. We have $d(v, v) = 0$ with the trivial path
+realizing this distance.
+\item Having constructed $T_i$, for each $u \in N(T_i)^\circ$, let $v_1,
+\ldots, v_r \in V_{T_i}$ be the vertices of $T_i$ which are adjacent to
+$u$. Choose an edge $e$ incident to $u, v_i$, some $i$ such that
+\[d(v, v_i) + w(e)\]
+is minimal. Let $T_{i + 1} = T + e$ Notice that if $W$ is a shortest path from
+$v$ to $v_i$ in $G$ which lies within $T$, then $W(v_i e u)$ is a minimal
+path from $v$ to $u$.
+\item Repeat the previous step until $w \in V_{T_i}$. Then set $T = T_i$.
 \end{enumerate}
+
+Alternately, we may repeat the procedure until $V_G = V_{T_i}$. This will
+give a computation of a shortest path to every vertex of $G$ from $v$.
+
+\begin{lem}
+The graph $T$ produced by the algorithm above, is a spanning tree.
+\end{lem}
+\begin{proof}
+By construction, it contains every vertex of $G$, and a path from $v$ to
+each of its vertices. Therefore it is a connected spanning graph. To show
+it is a tree, we need to show that it is acyclic.  If it did have a cycle,
+this would be added at some particular minimal stage, say going from $T_i$
+to $T_{i+1}$. That is to say, the cycle would necessarily involve the new
+edge $e$ added. But by construction, the degree of the new added vertex $u$
+in $T_{i+1}$ is $1$ since the only edge it is incident to is $e$. But
+therefore it cannot be part of a cycle in $T_{i+1}$, giving a
+contradiction.
+\end{proof}
+
+\begin{cor}
+Every connected graph has a spanning subtree $T < G$ with $v(T) = e(T) +
+1$.
+\end{cor}
+
+\begin{prop}
+A connected graph $G$ is a tree if and only if $e(G) + 1 = v(G)$.
+\end{prop}
+\begin{proof}
+Suppose that $G$ is connected with $e(G) + 1 = v(G)$.
+Let $T < G$ be a spanning subtree with $e(T) + 1 = v(T)$. Since it is
+spanning, we have $v(T) = v(G) = e(G) + 1$. But therefore $e(G) = e(T)$ and
+so $T = G$, showing that $G$ is a tree.
+
+The converse is exactly the statement of Lemma~\ref{tree count lem}.
+\end{proof}
+
 
 \section{Regular graphs}
 

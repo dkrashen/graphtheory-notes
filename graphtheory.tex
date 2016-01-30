@@ -60,8 +60,8 @@
 \newtheorem{conj}[thm]{Conjecture}
 \newtheorem{prop}[thm]{Proposition}
 
-\newtheorem{exercise}[thm]{Exercise}
 \newtheorem{question}[thm]{Question}
+\newtheorem{exercise}{Exercise}[section]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % typography stuff
@@ -151,6 +151,12 @@ additional notation
 \item added spanning subgraph material (some) in Section~\ref{lecture 5}
 \end{itemize}
 
+\section{Updates 1/30/2016}
+\begin{itemize}
+\item added Lemma~\ref{dijkstra optimality}
+on the optimality of Dijkstra's algorithm.
+\item reorganized exercises (to ends of chapters)
+\end{itemize}
 
 
 \chapter{Lecture 1: The language of graphs}
@@ -304,7 +310,7 @@ defining the function $\psi$ as the fundamental concept, one may instead
 define the notion of \textbf{incidence} as the fundamental concept as
 follows:
 
-\begin{defn}
+\begin{defn} \label{griph}
 A griph $G$ is an ordered triple $(V, E, \alpha)$ consisting of a set of
 vertices $V$, a set of edges $E$, and a set of ordered pairs $\alpha
 \subset V \times E$ such that \item for every $e \in E$, there is at least
@@ -313,10 +319,6 @@ $(v, e) \in \alpha$, we say that $v$ is incident to $e$. A griph is called
 simple if every edge is incident to exactly two vertices.
 \end{defn}
 
-\begin{exercise}
-Show that griphs are exactly in correspondence with graphs in such a way
-that the relationship of incidence lines up.
-\end{exercise}
 
 \section{Other basic notions} \label{other basic notions section}
 
@@ -324,6 +326,14 @@ For a graph $G$, we let $v(G) = \#V_G$ denote the number of vertices of
 $G$, and $e(G) = \#E_G$ denote the number of edges of $G$. We let
 $\delta(G)$ denote the mininum degree of a vertex of $G$, and $\Delta(G)$
 denote the maximum degree of a vertex.
+
+\section{Exercises}
+
+\begin{exercise}
+Show that griphs are exactly in correspondence with graphs in such a way
+that the relationship of incidence lines up.
+\end{exercise}
+
 
 \chapter{Lecture 2: Digraphs and degree formulas}
 \section{Directed graphs}
@@ -446,6 +456,8 @@ as desired.
 A surprising conclusion here is that the sum of the degrees of the vertices
 of a graph must be even! 
 
+\section{Exercises}
+
 \chapter{Lecture 3: Subgraphs, isomorphisms}
 
 \section{Isomorphisms}
@@ -482,14 +494,6 @@ edges and vertices.
 \subsection{Simplifications for simple graphs}
 It is perhaps useful to note that this definition may be made a bit simpler
 in the case of simple graphs (not suprising, I'm sure). To be precise:
-
-\begin{exercise}
-Suppose that $G$ and $H$ are simple graphs. Suppose we have a bijective
-function $g: V_G \to V_H$. Then there exists a unique graph isomorphism $f
-= (f_V, f_E) : G \to E$ with $f_V = g$ if and only if for every two
-vertices $v, w \in V_G$, we have that $v$ is adjacent to $w$ if and only if
-$g(v)$ is adjacent to $g(w)$.
-\end{exercise}
 
 Expanding on this idea a bit, we see that in a simple graph, the graph is
 determined up to isomorphism by the relationship of adjacency -- that is,
@@ -555,15 +559,6 @@ TRIANGLE   \ \ \ \ \ \ DISCRETE GRAPH WITH 3 VERTICES
 
 We may now formally state the previous result as follows:
 
-\begin{exercise}
-Show that every simple graph with $6$ vertices must contain an induced
-subgraph isomorphic to one of the above graphs\footnote{hint: as a first
-step, considering
-the friends of one particular person $A$, partitions the other $5$ people into
-two groups (friends of $A$ and not friends of $A$), it follows that one of
-these two groups must have at least $3$ people}.
-\end{exercise}
-
 In generalizing this result, which we will look into later in
 Chapter~\ref{ramsey chapter}, it is natural to want to consider groups of
 $n$ vertices in a graph, all of which are connected. The correponding
@@ -582,12 +577,8 @@ $G[\{v_1, \ldots, v_n\}]$ is isomorphic to $K_n$.
 \end{defn}
 
 It is very natural to ask, for a given graph, about the existence or
-non-existence of cliques of a given size.
-
-\begin{exercise}
-Find the smallest number $n$ such that every simple graph with $n$ edges
-and $6$ vertices has a $3$-clique.
-\end{exercise}
+non-existence of cliques of a given size -- see, for example exercise
+\label{ramsey 6}.
 
 Another way to generalize the graph $K_3$ is in the notion of a cycle graph:
 \begin{defn}
@@ -603,11 +594,6 @@ and one additional edge connecting $1$ and $n$.
 A cycle in a (not necessarily simple) graph $G$ is a subgraph $C \subset G$
 such that $C \cong C_n$ for some $n \geq 3$.
 \end{defn}
-
-\begin{exercise}
-Give an example of a simple graph with 4 vertices and exactly $3$ cycles, and a
-graph with $3$ vertices and exactly $2$ cycles.
-\end{exercise}
 
 As we will see, cycles and cliques are interesting for a variety of
 reasons, both practically and theoretically. Intuitively,
@@ -633,17 +619,12 @@ incident to it. Note also that whenever we have any two subgraphs $H_1,
 H_2$ in a graph $G$, we may find a unique subgraph $H < G$ with $H = H_1
 \cup H_2$. 
 
-\begin{defn}
+\begin{defn} \label{intersection definition}
 Let $G$ be a graph and $H_1, H_2 < G$ subgraphs of $G$. We define the
 \textbf{intersection}\index{intersection (of graphs)} $H_1 \cap
 H_2$ to be the subgraph with $V_{H_1 \cap H_2} = V_{H_1} \cap V_{H_2}$ and
 $E_{H_1 \cap H_2} = E_{H_1} \cap E_{H_2}$. 
 \end{defn}
-
-\begin{exercise}
-Verify that this definition does in fact give a well-defined subgraph of
-$G$.
-\end{exercise}
 
 \section{Other operations on graphs}
 
@@ -666,6 +647,42 @@ to be the induced subgraph $G - v = G[V \setminus \{v \}$. That is, it is
 the graph obtained by removing the vertex $v$ as well as all edges incident
 to $v$.
 \end{defn}
+
+\section{Exercises}
+
+\begin{exercise}
+Suppose that $G$ and $H$ are simple graphs. Suppose we have a bijective
+function $g: V_G \to V_H$. Then there exists a unique graph isomorphism $f
+= (f_V, f_E) : G \to E$ with $f_V = g$ if and only if for every two
+vertices $v, w \in V_G$, we have that $v$ is adjacent to $w$ if and only if
+$g(v)$ is adjacent to $g(w)$.
+\end{exercise}
+
+\begin{exercise}
+Show that every simple graph with $6$ vertices must contain an induced
+subgraph isomorphic to one of the above graphs\footnote{hint: as a first
+step, considering
+the friends of one particular person $A$, partitions the other $5$ people into
+two groups (friends of $A$ and not friends of $A$), it follows that one of
+these two groups must have at least $3$ people}.
+\end{exercise}
+
+\begin{exercise} \label{ramsey 6}
+Find the smallest number $n$ such that every simple graph with $n$ edges
+and $6$ vertices has a $3$-clique.
+\end{exercise}
+
+\begin{exercise}
+Give an example of a simple graph with 4 vertices and exactly $3$ cycles, and a
+graph with $3$ vertices and exactly $2$ cycles.
+\end{exercise}
+
+\begin{exercise}
+Verify that definition \ref{intersection definition} does in fact give a
+well-defined subgraph.
+\end{exercise}
+
+
 
 \chapter{Lecture 4: Paths, walks, trails, circuits, cycles}
 
@@ -715,11 +732,7 @@ reverse of $W$, denoted $W^{-1}$ to be the walk $v_n e_n v_{n-1} \cdots e_2
 v_1$.
 \end{defn}
 
-\begin{exercise}
-Define a relation on the vertices of a graph $G$ by saying that $v \sim w$
-if and only if there exists a $(v, w)$-walk in $G$. Show that this gives an
-equivalence relation.
-\end{exercise}
+In Exercise~\ref{walk equivalence}
 
 In this way, we find that the set $V_G$ of vertices of $G$ can be written
 as a disjoint union of equivalence classes $V_G = \bigcup_{i = 1}^n V_i$.
@@ -732,27 +745,6 @@ is \Xb{connected} if it has a single component.
 
 Note that a graph is a disjoint union of its components, $G = \bigcup_{i =
 1}^{c(G)} G[V_i]$.
-
-\begin{exercise}
-Show that $G$ is connected if and only if we cannot find nonempty subgraphs
-$H_1, H_2$ such that $G$ is a disjoint union of $H_1$ and $H_2$.
-\end{exercise}
-
-\begin{exercise} \label{components exercise}
-Somewhat more generally, show that 
-\begin{enumerate}[1. ]
-\item $c(G)$ is the maximum number such that
-we may write $G$ as a disjoint union $G = \cup_{i = 1}^{c(G)} G_i$.
-\item If we have $G = \cup_{i = 1}^n G_i$ a disjoint union, where each
-subgraph $G_i$ is connected, then the $G_i$ are the connected components of
-$G$ and $n = c(G)$. 
-\end{enumerate}
-\end{exercise}
-
-\begin{exercise} \label{leaf doesn't change components}
-Suppose $G$ is a graph and $v \in V_G$ with $\deg(v) = 1$. Then $c(G) = c(G
-- v)$.
-\end{exercise}
 
 \subsection{Bridges}
 
@@ -846,6 +838,36 @@ type of walk. Of course the connection is that if $v_1 e_2 v_2 \cdots
 e_{n+1} v_1$ is a cycle, then the vertices $v_1, v_2, \ldots, v_n$
 together with the edges $e_2, e_3, \ldots, e_{n+1}$ give a subgraph isomorphic
 to $C_n$.
+
+\section{Exercises}
+
+\begin{exercise} \label{walk equivalence}
+Define a relation on the vertices of a graph $G$ by saying that $v \sim w$
+if and only if there exists a $(v, w)$-walk in $G$. Show that this gives an
+equivalence relation.
+\end{exercise}
+
+\begin{exercise}
+Show that $G$ is connected if and only if we cannot find nonempty subgraphs
+$H_1, H_2$ such that $G$ is a disjoint union of $H_1$ and $H_2$.
+\end{exercise}
+
+\begin{exercise} \label{components exercise}
+Somewhat more generally, show that 
+\begin{enumerate}[1. ]
+\item $c(G)$ is the maximum number such that
+we may write $G$ as a disjoint union $G = \cup_{i = 1}^{c(G)} G_i$.
+\item If we have $G = \cup_{i = 1}^n G_i$ a disjoint union, where each
+subgraph $G_i$ is connected, then the $G_i$ are the connected components of
+$G$ and $n = c(G)$. 
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise} \label{leaf doesn't change components}
+Suppose $G$ is a graph and $v \in V_G$ with $\deg(v) = 1$. Then $c(G) = c(G
+- v)$.
+\end{exercise}
+
 
 \chapter{Lecture 5: Spanning subgraphs} \label{lecture 5}
 
@@ -1004,6 +1026,36 @@ path from $v$ to $u$.
 
 Alternately, we may repeat the procedure until $V_G = V_{T_i}$. This will
 give a computation of a shortest path to every vertex of $G$ from $v$.
+
+Let's make sure that this algorithm does what it is supposed to do:
+\begin{lem} \label{dijkstra optimality}
+At a given stage, the new vertex $u$ and edge $e$ incident to $u, v_i$ are
+such that, if $W$ is a path in $T_i$ from $v$ to $v_i$ of minimal length
+(i.e. such that $\ell(W)= d(v, v_i)$, then the new path $Weu$ is a miminal
+length path from $v$ to $u$.
+
+In fact, more is true: if $u'$ is \textit{any} vertex in $V_G \setminus
+V_{T_i}$, we have $\ell(Weu) = \ell(W) + w(e) \leq d(v, u')$. That is, $u$
+is at least as to $v$ as any other vertex in $G$ not already in $T_i$, and
+$W$ in particular realizes a path of length at least as short as any of
+these distances.
+\end{lem}
+\begin{proof}
+We prove the second stronger statement. Suppose that $W'$ is any walk from
+$v$ to $u'$ for $u'$ any vertex in $V_G \setminus V_{T_i}$. We will show
+that $\ell(W') \leq \ell(W)$. Since $W'$ starts at $v$ and ends at $u'$ not
+in $T_i$, there is some first vertex $u''$ which occurs along the walk
+$W'$, and which is not in $T_i$ if we let $W''$ be the first part of the
+walk $W'$, going from $v$ to $u''$ (omitting the part of the walk $W'$
+going from $u''$ to $u'$), we find that $\ell(W'') \leq \ell(W')$ (equality
+holding in the case that $u' = u''$). In particular, it suffices to show
+that $\ell(W) \leq \ell(W'')$. Since $u''$ is the first vertex of the walk
+not in $T_i$, the vertex just preceeding it must be in $T_i$, so $W''$ has
+the form $U e'u''$ where $U$ is a $(v, w)$-path with $w \in V_{T_i}$. By
+definition, it follows that $u'' \in N(T_i)^\circ$, and by the algorithm we
+know that by choice of $u$, for any $\ell(W) + w(e) = \ell(Weu) \leq
+\ell(U) + w(e') = \ell(W'')$ as claimed.
+\end{proof}
 
 \begin{lem}
 The graph $T$ produced by the algorithm above, is a spanning tree.

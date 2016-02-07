@@ -1,0 +1,54 @@
+
+\section{Real world graph problems}
+
+\subsection{Scheduling}
+\begin{itemize}
+\item vertices = jobs that need to be done
+\item edges = jobs which require conflicting resources
+\end{itemize}
+problem: how to decide how many ``periods of work'' needed to complete
+all jobs.
+
+Similar problem: table arrangements at a wedding
+\begin{itemize}
+\item vertices = guests
+\item edges = guest that don't get along
+\end{itemize}
+problem: how many tables?
+
+translation: vertex colorings, chromatic number of a graph
+\begin{defn}
+A \Xb{vertex coloring} of a graph $G$ is a function $f$ defined on the set of
+vertices of $G$. An vertex $n$-coloring is a function $f : V_G \to \{1,
+\ldots, n\}$. We say that a vertex coloring is \textbf{proper}\index{vertex
+coloring!proper} if $f(v) \neq f(w)$ for adjacent vertices $v, w$.
+\end{defn}
+
+\begin{defn}
+The chromatic number of a graph, $\chi(G)$, is the minimal number $n$ such
+that $G$ has a proper vertex $n$-coloring.
+\end{defn}
+
+\subsection{Tournaments}
+
+various teams need to play each other. disjoint pairs of teams can play
+simultaneously, but of course the same team can't play at the same time.
+How many rounds are needed for teams to play each other?
+\begin{itemize}
+\item vertices = teams
+\item edges = teams who need to play each other
+\end{itemize}
+problem: how many rounds?
+
+\begin{defn}
+An \Xb{edge coloring} of a graph $G$ is a function $f$ defined on the set of
+edges of $G$. An edge $n$-coloring is a function $f : E_G \to \{1,
+\ldots, n\}$. We say that an edge coloring is \Xb{proper}{proper!edge
+coloring} if $f(e) \neq f(e')$ for adjacent vertices $e, e'$.
+\end{defn}
+
+\begin{defn}
+The \Xb{edge chromatic number} of a graph, $\chi'(G)$, is the minimal
+number $n$ such that $G$ has a proper edge $n$-coloring.
+\end{defn}
+

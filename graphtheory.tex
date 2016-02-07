@@ -7,6 +7,14 @@
 
 % symbols and math stuff
 \usepackage{amsmath,amsthm,amssymb}
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usetikzlibrary{arrows,%
+                petri,%
+                topaths}%
+
+\usepackage{tkz-berge}
+
 
 % math operators
 \usepackage{amsopn}
@@ -158,174 +166,22 @@ on the optimality of Dijkstra's algorithm.
 \item reorganized exercises (to ends of chapters)
 \end{itemize}
 
+\section{Updates 2/07/2016}
+\begin{itemize}
+\item add Chapter~\ref{chap:more connectivity}
+\item defined trivial graphs: Definition~\ref{def:trivial}
+\end{itemize}
+
 
 \chapter{Lecture 1: The language of graphs}
 
-\section{Graphs}
-Graphs encode the idea of connections between things, for example
-\begin{itemize}
-\item networks of computers
-\item people and their relationships
-\item cities and highways
-\item sets and intersections
-\item workers and tasks
-\end{itemize}
+\input{sec:graphs-intro.tex}
 
+\input{sec:real-world-intro.tex}
 
-In formal mathematical terms, a graph is:
-\begin{defn}
-A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of
-\begin{itemize}
-\item a finite, nonempty set $V$, whose elements are referred to as vertices,
-\item a finite (possibly empty) set $E$, whose elements are referred to as
-edges, and
-\item an ``incidence'' function $\psi: E \to \ms R_2(V)$,
-\end{itemize}
-where $\ms R_2(V)$ is the set of unordered pairs of elements of $V$ (which
-one may also think of as two elements multisubsets of $V$ -- see
-Definition~\ref{multisubsets definition}).
-\end{defn}
+\input{sec:language-rationale.tex}
 
-PICTURES AND EXAMPLES HERE
-
-\begin{notn}
-For a graph $G = (V, E, \psi)$ we write $V_G$ for $V$, $E_G$ for $E$ and
-$\psi_G$ for $\psi$.
-\end{notn}
-In other words, using this notational convention, if we are given graphs
-$G, H, K$, and have not specified letters for their sets of vertices,
-edges, etcetera, we may write, for example, $E_K$ for the edges of the
-graph $K$, $V_H$ for the vertices of $H$, and $\psi_G$ for the incidence
-function of $G$.
-
-\begin{defn}
-Let $G$ be a graph, $e \in E_G$ an edge and $v \in V_G$ a vertex. We say
-that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
-\end{defn}
-
-\begin{defn}
-Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are
-\Xb{adjacent} if there is an edge $e$ with $v$ and $w$ incident to
-$e$.
-\end{defn}
-
-\begin{defn}
-Let $G$ be a graph $e, e' \in E_G$. We say that $e$ and $e'$ are
-\Xb{adjacent} if there is a vertex $v$ with $e$ and $e'$ incident to
-$v$.
-\end{defn}
-
-DIAGRAM
-
-\begin{defn}
-Let $G$ be a graph. If $e \in E_G$ is an edge, we say that $e$ is a
-\Xb{loop}, if $e$ is incident to exactly one vertex.
-\end{defn}
-
-\begin{defn}
-We say that $G$ is a \Xb{simple graph} if
-\begin{itemize}
-\item $G$ has no loops,
-\item there is at most $1$ edge incident to any pair of vertices.
-\end{itemize}
-\end{defn}
-Note that the second condition is the same as requiring that the function
-$\psi_G$ be one-to-one.
-
-Graphs can be drawn in many different ways:
-
-\begin{defn}
-$G$ is called a \Xb{planar graph} if it may be drawn in the plane with no
-edges crossing.
-\end{defn}
-
-\section{Real world graph problems}
-
-\subsection{Scheduling}
-\begin{itemize}
-\item vertices = jobs that need to be done
-\item edges = jobs which require conflicting resources
-\end{itemize}
-problem: how to decide how many ``periods of work'' needed to complete
-all jobs.
-
-Similar problem: table arrangements at a wedding
-\begin{itemize}
-\item vertices = guests
-\item edges = guest that don't get along
-\end{itemize}
-problem: how many tables?
-
-translation: vertex colorings, chromatic number of a graph
-\begin{defn}
-A \Xb{vertex coloring} of a graph $G$ is a function $f$ defined on the set of
-vertices of $G$. An vertex $n$-coloring is a function $f : V_G \to \{1,
-\ldots, n\}$. We say that a vertex coloring is \Xb{proper}{proper!vertex
-coloring} if $f(v) \neq f(w)$ for adjacent vertices $v, w$.
-\end{defn}
-
-\begin{defn}
-The chromatic number of a graph, $\chi(G)$, is the minimal number $n$ such
-that $G$ has a proper vertex $n$-coloring.
-\end{defn}
-
-\subsection{Tournaments}
-
-various teams need to play each other. disjoint pairs of teams can play
-simultaneously, but of course the same team can't play at the same time.
-How many rounds are needed for teams to play each other?
-\begin{itemize}
-\item vertices = teams
-\item edges = teams who need to play each other
-\end{itemize}
-problem: how many rounds?
-
-\begin{defn}
-An \Xb{edge coloring} of a graph $G$ is a function $f$ defined on the set of
-edges of $G$. An edge $n$-coloring is a function $f : E_G \to \{1,
-\ldots, n\}$. We say that an edge coloring is \Xb{proper}{proper!edge
-coloring} if $f(e) \neq f(e')$ for adjacent vertices $e, e'$.
-\end{defn}
-
-\begin{defn}
-The \Xb{edge chromatic number} of a graph, $\chi'(G)$, is the minimal
-number $n$ such that $G$ has a proper edge $n$-coloring.
-\end{defn}
-
-\section{The rationale behind the language}
-
-The choice of thinking of a graph as a triple $G = (V, E, \psi)$ has its
-advantages and disadvantages. If we were only concerned with simple graphs,
-we could have simplified our notation somewhat by omitting the function
-$\psi$, and letting $E$ itself be a subset of the set of 
-unordered pairs of distinct elements of $V$. In the case of general graphs,
-however, where there can be multiple edges between two vertices, this is
-somewhat less convenient. We could persist with this approach by saying
-that $E$ be a multisubset instead of a subset, however, this is a little
-bit less convenient later when we wish to talk about colorings or
-labellings of edges.
-
-An alternate way of defining things could be as follows: Instead of
-defining the function $\psi$ as the fundamental concept, one may instead
-define the notion of \textbf{incidence} as the fundamental concept as
-follows:
-
-\begin{defn} \label{griph}
-A griph $G$ is an ordered triple $(V, E, \alpha)$ consisting of a set of
-vertices $V$, a set of edges $E$, and a set of ordered pairs $\alpha
-\subset V \times E$ such that \item for every $e \in E$, there is at least
-one, and at most two elements $v \in V$ such that $(v, e) \in \alpha$. If
-$(v, e) \in \alpha$, we say that $v$ is incident to $e$. A griph is called
-simple if every edge is incident to exactly two vertices.
-\end{defn}
-
-
-\section{Other basic notions} \label{other basic notions section}
-
-For a graph $G$, we let $v(G) = \#V_G$ denote the number of vertices of
-$G$, and $e(G) = \#E_G$ denote the number of edges of $G$. We let
-$\delta(G)$ denote the mininum degree of a vertex of $G$, and $\Delta(G)$
-denote the maximum degree of a vertex.
+\input{sec:other-basic-notions.tex}
 
 \section{Exercises}
 
@@ -420,10 +276,6 @@ V_G$, denoted $\deg v$ to be the number of edges incident to $v$. If it is
 necessary to specify the graph, we may also write $\deg_G v$.
 \end{defn}
 
-\begin{defn}
-We say that a graph $G$ is $k$-\textbf{regular}\index{graph!regular} if every vertex of 
-\end{defn}
-
 \begin{prop}[The degree formula for graphs]
 Suppose that $G$ is any graph. Then we have
 \[\sum_{v \in V_G} \deg v = 2\#E.\]
@@ -489,7 +341,38 @@ $\psi(e)$ is determined precisely by which elements it contains).
 
 This is very useful, as our main concern is structural information about
 graphs, as opposed to the specific names which we have assigned to their
-edges and vertices.
+edges and vertices. For this reason, when drawing a graph, we will
+typically omit names for the vertices and edges, drawing our graphs as in
+figure~\ref{fig:graph examples} instead.
+
+\begin{figure} \label{fig:graph examples}
+\begin{center}
+\caption{some graphs}
+
+\begin{tikzpicture}[rotate=90] 
+  \tikzset{VertexStyle/.style = {shape = circle,fill = black,minimum size =
+  5pt,inner sep=0pt}}
+  \Vertices[NoLabel]{circle}{A,B,C}
+  \Edges(A,B,C,A)
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}[rotate=30] 
+  \tikzset{VertexStyle/.style = {shape = circle,fill = black,minimum size =
+  5pt,inner sep=0pt}}
+  \Vertices[NoLabel]{circle}{a, b, c, d, e, f}
+  \Edges(a, b, c, d, e, f, a)
+  \Edges(a, c, e, a)
+  \Edges(b, d, f, b)
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}[rotate=90]
+  \GraphInit[vstyle=simple]
+  \tikzset{VertexStyle/.style = {shape = circle,fill = black,minimum size =
+  5pt,inner sep=0pt}}
+  \grPetersen[RA=2,RB=1]
+\end{tikzpicture}
+\end{center}
+\end{figure}
 
 \subsection{Simplifications for simple graphs}
 It is perhaps useful to note that this definition may be made a bit simpler
@@ -498,11 +381,46 @@ in the case of simple graphs (not suprising, I'm sure). To be precise:
 Expanding on this idea a bit, we see that in a simple graph, the graph is
 determined up to isomorphism by the relationship of adjacency -- that is,
 which vertices are joined by an edge. That is to say, although these two
-graphs shown below are different as graphs:
+graphs shown in Figure~\ref{fig:isomorphism example} are different as
+graphs, they are still isomorphic canonical way, via the labelling of the
+vertices. 
 
-TWO GRAPHS WITH THE SAME LABELS ON VERTICES BUT DIFFERENT LABELS ON EDGES,
+\begin{figure} \label{fig:isomorphism example}
+\caption{isomorphic graphs}
+\begin{center}
+\begin{tikzpicture}[scale=0.75,transform shape]
+  \Vertex[x=0,y=0]{A}
+  \Vertex[x=3,y=3]{B}
+  \Vertex[x=0,y=3]{C}
+  \Vertex[x=3,y=0]{D}
 
-they are still isomorphic in a canonical way. 
+  \tikzstyle{LabelStyle}=[fill=white]
+
+  \Edge[label=$1$](A)(C)
+  \Edge[label=$2$](B)(C)
+  \Edge[label=$3$](C)(D)
+  \Edge[label=$4$](D)(A)
+  \Edge[label=$5$](B)(D)
+\end{tikzpicture}
+\ \ \ \ 
+\begin{tikzpicture}[scale=0.75,transform shape]
+  \Vertex[x=0,y=0]{A}
+  \Vertex[x=3,y=3]{B}
+  \Vertex[x=0,y=3]{C}
+  \Vertex[x=3,y=0]{D}
+
+  \tikzstyle{LabelStyle}=[fill=white]
+
+  \Edge[label=$1$](A)(C)
+  \Edge[label=$2$](B)(C)
+  \Edge[label=$3$](C)(D)
+  \Edge[label=$5$](D)(A)
+  \Edge[label=$4$](B)(D)
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+
 
 \begin{notn}
 Along the same lines, for a
@@ -732,7 +650,9 @@ reverse of $W$, denoted $W^{-1}$ to be the walk $v_n e_n v_{n-1} \cdots e_2
 v_1$.
 \end{defn}
 
-In Exercise~\ref{walk equivalence}
+In Exercise~\ref{walk equivalence}, we defined an equivalence relation on
+the set $V_G$ of vertices of $G$, by saying that two vertices $v, w$ are
+equivalent if there is a $(v,w)$-walk in $G$.
 
 In this way, we find that the set $V_G$ of vertices of $G$ can be written
 as a disjoint union of equivalence classes $V_G = \bigcup_{i = 1}^n V_i$.
@@ -752,7 +672,7 @@ Note that a graph is a disjoint union of its components, $G = \bigcup_{i =
 We say that $e \in E_G$ is a bridge if $c(G - e) > c(G)$.
 \end{defn}
 
-\begin{lem} \label{components plus 1}
+\begin{lem} \label{lem:components plus 1}
 Suppose that $e$ is a bridge. Then $c(G - e) = c(G) + 1$.
 \end{lem}
 \begin{proof}
@@ -869,7 +789,7 @@ Suppose $G$ is a graph and $v \in V_G$ with $\deg(v) = 1$. Then $c(G) = c(G
 \end{exercise}
 
 
-\chapter{Lecture 5: Spanning subgraphs} \label{lecture 5}
+\chapter{Lecture 5: Trees and spanning trees} \label{lecture 5}
 
 \begin{defn}
 Let $H$ be a subgraph of $G$. We say that $H$ is a \Xb{spanning subgraph}
@@ -916,7 +836,7 @@ is the unique one. But if $T -  e$ were connected, a $(v, w)$-path in $T -
 e$ would give a $(v, w)$-path in $T$ which didn't involve $e$,
 contradicting uniqueness.
 
-We therefore have by Lemma~\ref{components plus 1} that $T - e$ is a
+We therefore have by Lemma~\ref{lem:components plus 1} that $T - e$ is a
 disjoint union of two connected graphs $T - e = T_1 \cup T_2$. Since $T -
 e$ is acyclic, $T_1, T_2$ must be as well, and therefore they are both
 trees. By assumption of minimality of $T$, it follows that we have $e(T_1)
@@ -926,7 +846,7 @@ trees. By assumption of minimality of $T$, it follows that we have $e(T_1)
 as desired.
 \end{proof}
 
-\subsection{Spanning trees and Dijkstra's algorithm}
+\section{Dijkstra's algorithm}
 
 Consider the following problem. Given a list of cities $c_1, c_2, \ldots,
 c_n$ and routes connecting certain cities, find the shortest route between
@@ -991,7 +911,7 @@ In this language our goal will be to construct, for a given $v, w$, a $(v,
 w)$-walk $W$ such that $\ell(W) = d(v, w)$. Of course such a walk will
 necessarily be a path.
 
-\subsubsection{the algorithm}
+\subsection{The algorithm}
 
 We will successsively build up a data set, which will consist of a subgraph
 $T \subset G$, together with the value $d(v, t)$ computed for each $t \in
@@ -1077,6 +997,10 @@ Every connected graph has a spanning subtree $T < G$ with $v(T) = e(T) +
 1$.
 \end{cor}
 
+\chapter{Lecture 6: More Trees}
+
+\section{Spanning trees and cycles}
+
 \begin{prop}
 A connected graph $G$ is a tree if and only if $e(G) + 1 = v(G)$.
 \end{prop}
@@ -1089,7 +1013,124 @@ so $T = G$, showing that $G$ is a tree.
 The converse is exactly the statement of Lemma~\ref{tree count lem}.
 \end{proof}
 
+It follows that a tree can be characterized therefore as a minimal
+connected graph. As an illustration of this, one sees that a graph $G$ is
+connected if and only if it contains a spanning subtree. On the one hand,
+such a spanning subtree would be a connected spanning subgraph, and it is
+clear that a graph with a spanning connected subgraph must itself be
+connected. On the other hand, if a graph is connected, then Dijkstra's
+algorithm provides us with a spanning subtree.
 
+\begin{lem}
+Let $G$ be a simple graph, and $T$ a spanning subgraph. Then for every $e
+\in E_G \setminus E_T$, $T + e$ contains a unique cycle.
+\end{lem}
+\begin{proof}
+
+\end{proof}
+
+\chapter{Lecture 7: Connectivity, part 1}
+
+In this lecture, we will explore different notions of connectivity and
+their relations to each other. The main goal will be to discuss Menger's
+results, which relate two particular broad concepts: on the one hand, how
+easy or difficult it is to make a disconnect a graph by the deletion of
+edges or vertices, and on the other hand, how redundant the connections are
+within a graph, described in terms of the number of independent paths
+between pairs of vertices, where independence may be described either in
+terms of having no common edges or vertices, respectively\footnote{idea for later: combine these notions: say a graph can be disconnected by
+removing some minimal collection of edges and vertices. how can we find an
+analogous notion of redundant paths (i.e. sharing no edges, and some
+maximal number of vertices...). raises the question of proportionality of
+vertices and edges.... also, is there a matroid interpretation for
+independent paths?}
+
+\section{Different notions of (dis-)connectivity}
+
+Before approaching Menger's results, however, we will start by simply
+relating the different notions of connectivity as measured by how one may
+make a graph disconnected by the removal of either edges or vertices.
+Recall (Definition~\ref{def:trivial}), that a graph is trivial if it has
+only a single vertex.
+
+\begin{defn} \label{def:connectivity}
+We say that the \Xb{connectivity} of a graph $G$, denoted $\kappa(G)$, is
+$i$, if $i$ is the minimum number such that there exist vertices $v_1,
+\ldots, v_i$ such that $G - \{v_i, \ldots, v_i\}$ is either trivial or
+disconnected. If $\kappa(G) \leq k$, we say that $G$ is
+\textbf{$k$-connected}.
+\end{defn}
+
+\begin{defn} \label{def:edge connectivity}
+We say that the \Xb{edge connectivity} of a graph $G$, denoted
+$\kappa'(G)$, is $i$, if $i$ is the minimum number such that there exist
+edges $e_1, \ldots, e_i$ such that $G - \{e_i, \ldots, e_i\}$ is either
+trivial or disconnected. If $\kappa'(G) \leq k$, we say that $G$ is
+\textbf{$k$-edge connected}.
+\end{defn}
+
+In particular, if $G$ is itself disconnected, then $\kappa(G) = \kappa'(G)
+= 0$.
+
+Intuitively, it should be easier to make a graph disconnected by the
+removal of vertices, as compared to the removal of edges, since the removal
+of a vertex also removes its incident edges. In fact, this intuition is
+correct, as the following proposition shows. Recall that $\delta(G)$ is the
+minimum degree of a vertex of $G$.
+
+\begin{prop}
+Let $G$ be a graph. Then $\delta(G) \geq \kappa'(G) \geq \kappa(G)$.
+\end{prop}
+\begin{proof}
+The first inequality $\delta(G) \geq \kappa'(G)$ is straightforward: if $G$
+is trivial, then $\kappa'(G) = 0$ and the result is automatic. Otherwise,
+let $v \in G$ be a vertex of degree $\delta(G)$. Such a vertex is incident
+to at most $\delta(G)$ edges (exactly this many of none of the incident
+edges are loops). In this case, removal of these edges results in a graph
+in which $v$ is now an isolated vertex, and hence a disconnected graph. It
+follows that $\delta(G) \geq \kappa'(G)$.
+
+For the remaining inequality, we work by induction on $\kappa'(G)$, with
+base case $\kappa'(G) = 0$. 
+Suppose that we know that the result is true for
+$(\ell - 1)$-connected graphs, and suppose that $G$ is $\ell$-connected.
+Let $E' \subset E(G)$ be a set of $\ell$ edges such that $G - E'$ is
+trivial or disconnected. Note that if $G - E'$ is trivial, then $G$ itself
+must only have a single vertex and must therefore be trivial. In
+particular, we may assume that in fact $G - E'$ is disconnected. Also, by
+the minimality of the set $E'$, it follows that $E'$ contains no loops.
+Choose $e \in E'$ and let $u, v$ be the two distinct incident vertices.
+Since we have $\kappa'(G - e) = \kappa'(G) - 1 = \ell - 1$, it follows by
+the induction hypothesis that $\kappa(G - e) \leq \ell - 1$, and hence we
+may find vertices $V' = \{v_1, \ldots, v_{\ell
+- 1}\} \subset V_G = V_{G - e}$ such that $(G - e) - V'$ is trivial or
+disconnected.
+
+In the case that $e$ is incident to one of the vertices of $V'$, it follows
+that we actually have $(G - e) - V' = G - V'$, and hence $V'$ would itself
+be a collection of vertices of $G$ such that $G - V'$ is trivial or
+disconnected. In particular, in this case we would have $\kappa(G) \leq
+\ell - 1 \leq \ell = \kappa'(G)$ as desired.
+
+In the case that $e$ is not incident ot a vertex of $V'$, consider the
+graph $G - V'$. This graph becomes trivial or disconnected after the
+removal of a single edge $e$. Let $w_1, w_2$ be the vertices incident to $e$.
+If $e$ is a loop then $G - V'$ was already trivial or disconnected and
+hence $\kappa(G) \leq \#V' = \ell - 1 \leq \kappa'(G)$. Let $W_i$ be the
+connected component of $w_i$ in $G - V' - e$ (note that these are the only
+connected components by Lemma~\ref{lem:components plus 1}). If both $W_i$
+are trivial with just the vertex $w_i$, then $G - V' - w_1$ is trivial
+and $\kappa(G) \leq \ell = \kappa(G')$. On the other hand, if $w_1 \neq u
+\in V_{W_1}$ then since $u$ is not connected by any path to $w_2$ in $G -
+V' - e$ it cannot be connected by any path to $w_2$ in $G - V' - w_1$,
+since this is a subgraph of $G - V' - e$. Hence $G - V' - w_1$ is
+disconnected, and $\kappa(G) \leq \#(V \cup \{w_1\}) = \ell = \kappa'(G)$.
+\end{proof}
+
+\chapter{Lecture 8: More Connectivity} \label{chap:more connectivity}
+\section{Bonds, cotrees and cuts}
+
+\chapter{Tours}
 \section{Regular graphs}
 
 \begin{defn}

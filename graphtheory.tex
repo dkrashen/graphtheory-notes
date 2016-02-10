@@ -170,6 +170,8 @@ on the optimality of Dijkstra's algorithm.
 \begin{itemize}
 \item add Chapter~\ref{chap:more connectivity}
 \item defined trivial graphs: Definition~\ref{def:trivial}
+\item added definition of underlying simple graph:
+Definition~\ref{def:underlying simple graph}
 \end{itemize}
 
 
@@ -431,12 +433,26 @@ some edge $e$ with $\psi(e) = vw$, or equivalently $v$ and $w$ are
 adjacent.
 \end{notn}
 
+
 \begin{defn}
 For a simple graph $G$, we define the \textbf{complement}\index{complement
 of a simple graph} $G$, denoted $\ov G$ to be the graph with the same set
 of vertices (i.e. $V_G = V_{\ov G}$) and such that a pair of vertices $v,
 w$ are adjacent in $\ov G$ if and only if they are \textit{not} adjacent in
 $G$.
+\end{defn}
+
+Associated to an arbitrary graph $G$, one may associate a simple graph
+$|G|$,
+called the \Xb{underlying simple graph} of $G$. This new graph has the same
+vertex set as $G$, and is obtained
+by deleting all loops of the original graph and by having a single edge $e$
+between vertices whenever they are adjacent in $G$. More precisely, we have 
+\begin{defn} \label{def:underlying simple graph}
+Let $G$ be a graph. We define the graph $|G|$ via:
+$V_{|G|} = V_G$, and 
+\[E_{|G|} = \{ uv \in \ms R_2(G) \mid \text{ $u$ is adjacent to $v$ in $G$
+}\}\] with $\psi_{|G|}(uv) = uv$.
 \end{defn}
 
 \section{Subgraphs}
@@ -1029,7 +1045,7 @@ Let $G$ be a simple graph, and $T$ a spanning subgraph. Then for every $e
 
 \end{proof}
 
-\chapter{Lecture 7: Connectivity, part 1}
+\chapter{Lecture 7: Connectivity, part 1} \label{chap:connectivity}
 
 In this lecture, we will explore different notions of connectivity and
 their relations to each other. The main goal will be to discuss Menger's
@@ -1128,7 +1144,121 @@ disconnected, and $\kappa(G) \leq \#(V \cup \{w_1\}) = \ell = \kappa'(G)$.
 \end{proof}
 
 \chapter{Lecture 8: More Connectivity} \label{chap:more connectivity}
+
+In this lecture, we'll continue our explorations of notions of
+connectivity. Let's start with some notions of how a graph may be
+disconnected, which relate to our previous notions from
+Chapter~\ref{chap:connectivity}.
+
+\section{Measures of (dis-connectivity)}
+
+\begin{defn}
+Let $G$ be a graph. For distinct, nonadjacent vertices $u, v \in V_G$, we
+say that a collection of vertices $V' \subset V_G \setminus \{u, v\}$ is a
+$(u,v)$-\Xb{vertex cut} if $G - V'$ contains to $(u, v)$-path. We denote
+the minimum size of a $(u,v)$-vertex cut by $\kappa(u, v)$.
+\end{defn}
+
+Of course, for distinct, nonadjacent vertices $u, v$, the deletion of every
+vertex of $V_G \setminus \{u, v\}$ results in a $(u, v)$-vertex cut, and so
+$\kappa(u, v) \leq v(G) - 2$. 
+
+\begin{defn}
+Let $G$ be a graph. For distinct vertices $u, v \in E_G$, we say that a
+collection of edges $E' \subset E_G$ is a $(u,v)$-\Xb{edge cut} if $G - E'$
+contains to $(u, v)$-path. We denote the minimum size of a $(u,v)$-edge cut
+by $\kappa'(u, v)$.
+\end{defn}
+
+We note that it follows immediately that for a nontrivial graph $G$, we
+have 
+\[\kappa'(G) = \min\{\kappa'(u, v) \mid \text{ for $u \neq v$} \}.\]
+Similarly we note:
+\begin{lem}
+Let $G$ be a graph such that the underlying simple graph of $|G|$ is not a
+complete graph. Then 
+\[\kappa(G) = \min\{\kappa(u,v) \mid \text{ for $u, v \in V_G$ nonadjacent
+and distinct}\}\]
+\end{lem}
+\begin{proof}
+Clearly $\kappa(u, v) \geq \kappa(G)$ for every pair of nonadjacent
+vertices $u, v$. It therefore suffices to show equality for some $u, v$.
+
+Let $V' \subset V_G$ be minimal such that $G - V'$ is trivial or
+disconnected. If it is trivial, then $\#G  - 1 = \#V'$, and no set of $\#G
+- 2$ vertices can make $G$ disconnected. In particular, it follows that
+every pair of vertices must be adjacent: if $u, v$ were not adjacent, then
+removal of every other vertex would produce a disconnected graph,
+contradicting the previous assertion. We therefore may conclude that $|G|$
+is complete, contraditing our hypothesis.
+
+We may therefore assume that our minimal set $V'$ has the property that $G
+- V'$ is disconnected. Let $u, v \in G - V'$ be some pair of vertices lying
+in different connected components of $G - V'$. It follows that $V'$ is a
+$(u, v)$-vertex cut. But its size must be minimal since if $V''$ was any
+other $(u, v)$-vertex cut, we would have $G - V''$ would also be
+disconnected and hence $\#V'' \geq \kappa(G) = \#V'$. Hence $\kappa(u,v) =
+\#V' =\kappa(G)$ as desired.
+\end{proof}
+
+\section{Menger's theorems}
+
+In this section, we will relate two different notions of connectivity: one
+the one hand, how easy it is to disconnect a graph via the deletion of
+edges or vertices, and on the other hand, how many independent paths there
+are between distinct vertices.
+
+\begin{defn}
+We say that two paths $W = v_0 e_1 v_1 e_2 \cdots e_n v_n$, and
+$W' = v_0' e_1' v_1' \cdots e_n' v_n'$ in a graph $G$ are \Xb{internally
+disjoint} if the sets $\{v_1, v_2, \ldots, v_{n-1}\}$ and $\{v_1', v_2',
+\ldots, v_{n-1}'\}$ have no common intersection. We say that they are
+\Xb{internally edge disjoint} if the sets $\{e_1, \ldots, e_n\}$ and
+$\{e_1', \ldots, e_n'\}$ have no common intersection.
+\end{defn}
+
+\begin{defn}
+For a graph $G$ and distinct vertices $u, v \in V_G$, we let $p(u, v)$
+denote the maximum size of a set of pairwise internally disjoint
+$(u,v)$-paths, and $p'(u,v)$ the maximum size of a set of pairwise
+internally edge disjoint $(u,v)$-paths.
+\end{defn}
+
+\begin{thm}[Menger's theorem, vertex version]
+Suppose that $G$ is a graph and $u, v \in V_G$ distinct, nonadjacent
+vertices. Then $\kappa(u, v) = p(u, v)$.
+\end{thm}
+\begin{proof}
+
+\end{proof}
+
 \section{Bonds, cotrees and cuts}
+
+\begin{defn}
+Given a graph $G$ and sets of vertices $S_1, S_2 \subset V_G$, we define
+\[ [S, S'] = \{e \in E_G \mid \exists v \in S, v' \in S', \text{ $e$
+incident to $v$ and $v'$}\}\]
+\end{defn}
+Note that there is no requirement here that $S$ and $S'$ need be distinct,
+or that the vertices $v, v'$ need be different. For example, for a vertex
+$v$, $[\{v\},\{v\}]$ would denote the set of loops at $v$, $[V_G, V_G]
+= E_G$, and $[\{v\}, V_G]$ is the set of edges incident to $v$.
+
+A particularly important case of this is when $S' = \overline S$, the
+complement of $S$ in $V_G$. In this case, removal of the edges $[S,
+\overline S]$ result in a graph in which there can be no path from a vertex
+in $S$ to a vertex in $S'$, and hence represents a set of edges which
+disconnects the graph. Based on this observation, we define:
+
+\begin{defn} \label{def:edge cut}
+Given a graph $G$, an \Xb{edge cut} in $G$ is a collection of edges of the
+form $[S, \overline S]$ for some subset $S \subset V_G$.
+\end{defn}
+
+\begin{defn} \label{def:bond}
+Given a graph $G$, a \Xb{bond} is a minimal, nonempty edge cut.
+\end{defn}
+
 
 \chapter{Tours}
 \section{Regular graphs}

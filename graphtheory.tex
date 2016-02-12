@@ -1,4 +1,3 @@
-
 \documentclass[12pt]{report}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -177,13 +176,212 @@ Definition~\ref{def:underlying simple graph}
 
 \chapter{Lecture 1: The language of graphs}
 
-\input{sec:graphs-intro.tex}
+\section{Graphs}
+Graphs encode the idea of connections between things, for example
+\begin{itemize}
+\item networks of computers
+\item people and their relationships
+\item cities and highways
+\item sets and intersections
+\item workers and tasks
+\end{itemize}
 
-\input{sec:real-world-intro.tex}
 
-\input{sec:language-rationale.tex}
+In formal mathematical terms, a graph is:
+\begin{defn}
+A \Xb{graph} $G$ is an ordered triple $(V, E, \psi)$ consisting of
+\begin{itemize}
+\item a finite, nonempty set $V$, whose elements are referred to as vertices,
+\item a finite (possibly empty) set $E$, whose elements are referred to as
+edges, and
+\item an ``incidence'' function $\psi: E \to \ms R_2(V)$,
+\end{itemize}
+where $\ms R_2(V)$ is the set of unordered pairs of elements of $V$ (which
+one may also think of as two elements multisubsets of $V$ -- see
+Definition~\ref{multisubsets definition}).
+\end{defn}
 
-\input{sec:other-basic-notions.tex}
+We represent such graphs visually by drawing vertices as dots or circles,
+and edges as lines between them. For example, the drawing in
+Figure~\ref{basic graph} would stand for the graph $G$ defined by $V_G =
+\{A, B, C, D\}, E_G = \{1, 2, 3, 4, 5\}$ and incidence function $\psi_G$
+given by:
+\[\psi_G(1) = AC, \ \psi_G(2) = BC, \ \psi_G(3) = CD, \ \psi_G(4) = AD, \
+\psi_G(5) = BD.\]
+
+\begin{figure} \label{basic graph}
+\caption{}
+\begin{center}
+\begin{tikzpicture}[scale=0.75,transform shape]
+  \Vertex[x=0,y=0]{A}
+  \Vertex[x=3,y=3]{B}
+  \Vertex[x=0,y=3]{C}
+  \Vertex[x=3,y=0]{D}
+
+  \tikzstyle{LabelStyle}=[fill=white]
+
+  \Edge[label=$1$](A)(C)
+  \Edge[label=$2$](B)(C)
+  \Edge[label=$3$](C)(D)
+  \Edge[label=$4$](D)(A)
+  \Edge[label=$5$](B)(D)
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+\begin{notn}
+For a graph $G = (V, E, \psi)$ we write $V_G$ for $V$, $E_G$ for $E$ and
+$\psi_G$ for $\psi$.
+\end{notn}
+In other words, using this notational convention, if we are given graphs
+$G, H, K$, and have not specified letters for their sets of vertices,
+edges, etcetera, we may write, for example, $E_K$ for the edges of the
+graph $K$, $V_H$ for the vertices of $H$, and $\psi_G$ for the incidence
+function of $G$.
+
+\begin{defn} \label{def:trivial}
+A graph is called \textbf{trivial}\index{graph!trivial} if it has a single
+vertex (see Figure~\ref{fig:some trivial graphs}).
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph, $e \in E_G$ an edge and $v \in V_G$ a vertex. We say
+that $e$ and $v$ are \Xb{incident} if $v \in \psi(e)$.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph $v, w \in V_G$. We say that $v$ and $w$ are
+\Xb{adjacent} if there is an edge $e$ with $v$ and $w$ incident to
+$e$.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph $e, e' \in E_G$. We say that $e$ and $e'$ are
+\Xb{adjacent} if there is a vertex $v$ with $e$ and $e'$ incident to
+$v$.
+\end{defn}
+
+DIAGRAM
+
+\begin{defn}
+Let $G$ be a graph. If $e \in E_G$ is an edge, we say that $e$ is a
+\Xb{loop}, if $e$ is incident to exactly one vertex.
+\end{defn}
+
+\begin{defn}
+Let $G$ be a graph. If $e \in E_G$ is an edge, we say that $e$ is an
+\Xb{arc}, if $e$ is incident to exactly two vertices.
+\end{defn}
+
+\begin{defn}
+We say that $G$ is a \Xb{simple graph} if
+\begin{itemize}
+\item $G$ has no loops,
+\item there is at most $1$ edge incident to any pair of vertices.
+\end{itemize}
+\end{defn}
+Note that the second condition is the same as requiring that the function
+$\psi_G$ be one-to-one.
+
+Graphs can be drawn in many different ways:
+
+\begin{defn}
+$G$ is called a \Xb{planar graph} if it may be drawn in the plane with no
+edges crossing.
+\end{defn}
+
+
+
+\section{Real world graph problems}
+
+\subsection{Scheduling}
+\begin{itemize}
+\item vertices = jobs that need to be done
+\item edges = jobs which require conflicting resources
+\end{itemize}
+problem: how to decide how many ``periods of work'' needed to complete
+all jobs.
+
+Similar problem: table arrangements at a wedding
+\begin{itemize}
+\item vertices = guests
+\item edges = guest that don't get along
+\end{itemize}
+problem: how many tables?
+
+translation: vertex colorings, chromatic number of a graph
+\begin{defn}
+A \Xb{vertex coloring} of a graph $G$ is a function $f$ defined on the set of
+vertices of $G$. An vertex $n$-coloring is a function $f : V_G \to \{1,
+\ldots, n\}$. We say that a vertex coloring is \textbf{proper}\index{vertex
+coloring!proper} if $f(v) \neq f(w)$ for adjacent vertices $v, w$.
+\end{defn}
+
+\begin{defn}
+The chromatic number of a graph, $\chi(G)$, is the minimal number $n$ such
+that $G$ has a proper vertex $n$-coloring.
+\end{defn}
+
+\subsection{Tournaments}
+
+various teams need to play each other. disjoint pairs of teams can play
+simultaneously, but of course the same team can't play at the same time.
+How many rounds are needed for teams to play each other?
+\begin{itemize}
+\item vertices = teams
+\item edges = teams who need to play each other
+\end{itemize}
+problem: how many rounds?
+
+\begin{defn}
+An \Xb{edge coloring} of a graph $G$ is a function $f$ defined on the set of
+edges of $G$. An edge $n$-coloring is a function $f : E_G \to \{1,
+\ldots, n\}$. We say that an edge coloring is \Xb{proper}{proper!edge
+coloring} if $f(e) \neq f(e')$ for adjacent vertices $e, e'$.
+\end{defn}
+
+\begin{defn}
+The \Xb{edge chromatic number} of a graph, $\chi'(G)$, is the minimal
+number $n$ such that $G$ has a proper edge $n$-coloring.
+\end{defn}
+
+
+\section{The rationale behind the language}
+
+The choice of thinking of a graph as a triple $G = (V, E, \psi)$ has its
+advantages and disadvantages. If we were only concerned with simple graphs,
+we could have simplified our notation somewhat by omitting the function
+$\psi$, and letting $E$ itself be a subset of the set of 
+unordered pairs of distinct elements of $V$. In the case of general graphs,
+however, where there can be multiple edges between two vertices, this is
+somewhat less convenient. We could persist with this approach by saying
+that $E$ be a multisubset instead of a subset, however, this is a little
+bit less convenient later when we wish to talk about colorings or
+labellings of edges.
+
+An alternate way of defining things could be as follows: Instead of
+defining the function $\psi$ as the fundamental concept, one may instead
+define the notion of \textbf{incidence} as the fundamental concept as
+follows:
+
+\begin{defn} \label{griph}
+A griph $G$ is an ordered triple $(V, E, \alpha)$ consisting of a set of
+vertices $V$, a set of edges $E$, and a set of ordered pairs $\alpha
+\subset V \times E$ such that \item for every $e \in E$, there is at least
+one, and at most two elements $v \in V$ such that $(v, e) \in \alpha$. If
+$(v, e) \in \alpha$, we say that $v$ is incident to $e$. A griph is called
+simple if every edge is incident to exactly two vertices.
+\end{defn}
+
+
+
+\section{Other basic notions} \label{other basic notions section}
+
+For a graph $G$, we let $v(G) = \#V_G$ denote the number of vertices of
+$G$, and $e(G) = \#E_G$ denote the number of edges of $G$. We let
+$\delta(G)$ denote the mininum degree of a vertex of $G$, and $\Delta(G)$
+denote the maximum degree of a vertex.
+
 
 \section{Exercises}
 
@@ -1199,6 +1397,38 @@ $(u, v)$-vertex cut. But its size must be minimal since if $V''$ was any
 other $(u, v)$-vertex cut, we would have $G - V''$ would also be
 disconnected and hence $\#V'' \geq \kappa(G) = \#V'$. Hence $\kappa(u,v) =
 \#V' =\kappa(G)$ as desired.
+\end{proof}
+
+\section{Warm up}
+
+It is not hard to see that if $G$ is a graph with no bridges, then every
+arc must lie on a cycle: if $e$ is any arc, incident to distinct vertices
+$u, v \in V_G$, then since $G - e$ is connected, there must be a
+$(u,v)$-path $P$ in $G - e < G$. In particular, the cycle $Peu$ contains
+$e$.
+
+What is interesting about this elementary observation is that it connects
+the two seemingly disparate notions: connectivity, as measured by being
+bridgeless, to the existence of ``lots'' of cycles. We will continue this
+theme through the chapter. For the moment, however, we will first give a
+much less trivial ``vertex version'' of the above observation:
+
+\begin{defn}
+Let $G$ be a graph. We say that a vertex $v \in V_G$ is a \Xb{cut vertex}
+if $c(G - v) > c(G)$. 
+\end{defn}
+In particular, for a connected graph $G$, we have $\kappa(G) = 1$ if and
+only if either $G$ has exactly $2$ vertices or $G$ has a cut vertex.
+
+\begin{prop}
+Suppose that $G$ is a connected graph with at least $3$ vertices and no cut
+vertices. Then for every pair of vertices $u, v \in V_G$ there exists a
+cycle passing through both $u$ and $v$.
+\end{prop}
+\begin{proof}
+We induct on the distance between the vertices $u$ and $v$ (here, by
+distance, we mean the minimum length of a path connecting $u$ and $v$). In
+the case that $u$ and $v$ are adjacent, say by an edge $e$, 
 \end{proof}
 
 \section{Menger's theorems}

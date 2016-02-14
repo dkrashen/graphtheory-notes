@@ -294,6 +294,9 @@ edges crossing.
 
 \section{Real world graph problems}
 
+In the section we'll consider some classic problems which translate
+naturally to graph theory.
+
 \subsection{Scheduling}
 \begin{itemize}
 \item vertices = jobs that need to be done
@@ -336,7 +339,7 @@ problem: how many rounds?
 \begin{defn}
 An \Xb{edge coloring} of a graph $G$ is a function $f$ defined on the set of
 edges of $G$. An edge $n$-coloring is a function $f : E_G \to \{1,
-\ldots, n\}$. We say that an edge coloring is \Xb{proper}{proper!edge
+\ldots, n\}$. We say that an edge coloring is \textbf{proper}\index{proper!edge
 coloring} if $f(e) \neq f(e')$ for adjacent vertices $e, e'$.
 \end{defn}
 
@@ -759,6 +762,8 @@ $E_{H_1 \cap H_2} = E_{H_1} \cap E_{H_2}$.
 \end{defn}
 
 \section{Other operations on graphs}
+
+\subsection{adding and removing edges and vertices}
 
 \begin{defn}
 Let $G$ be a graph, and $e \in E_G$. We define a subgraph $G - e$ of $G$ by
@@ -1454,17 +1459,113 @@ $(u,v)$-paths, and $p'(u,v)$ the maximum size of a set of pairwise
 internally edge disjoint $(u,v)$-paths.
 \end{defn}
 
+\begin{defn}
+Let $G$ be a graph and $A \subset V_G$ a collection of vertices of $G$. We
+define a new graph $G/A$, which we refer to as $G$ after \Xb{shrinking} $A$
+as follows: We set $V_{G/A} = (V_G \setminus A) \cup \{a\}$, where $a$ is a
+new vertex, $E_{G/A} = E_G \setminus [A, A]$, and $\psi_{G/A}$ is defined
+by
+\[ \psi_{G/A}(e) = \left\{
+\begin{matrix}
+  \psi_G(e) & e \in [\ov A, \ov A] \\
+  va & \text{if $\psi(e) = vx$, for $x \in A$}
+\end{matrix}
+\right.\]
+\end{defn}
+Informally, $G/A$ is the result of replacing all vertices of $A$ with a
+single vertex and removing all edges internal to the vertices of $A$.
+
+\begin{exercise} \label{ex: underlyin simple connectedness}
+Suppose that $G$ is a graph and $u, v \in V_G$ are distinct, nonadjacent
+vertices. Then $\kappa_{|G|}(u, v) = \kappa_G(u, v)$ and $p_{|G|}(u, v) =
+p_G(u, v)$, where $|G|$ is the underlying simple graph for $G$ (see
+Definition~\ref{def:underlying simple graph}).
+\end{exercise}
+
 \begin{thm}[Menger's theorem, vertex version]
 Suppose that $G$ is a graph and $u, v \in V_G$ distinct, nonadjacent
 vertices. Then $\kappa(u, v) = p(u, v)$.
 \end{thm}
 \begin{proof}
+By Exercise~\ref{ex: underlying simple connectedness}, we may assume that
+$G$ is simple.
 
+One direction is straightforward: if $P_1, \ldots, P_k$ is a family of
+internally disjoint $(u, v)$-paths, then given a $(u, v)$-vertex cut $V'
+\subset V_G$, since we cannot have $P_i \subset G - V'$ for any $i$, it
+follows that $V'$ must contain at least some vertex from each of the paths
+$P_i$. Since they are internally disjoint, we therefore have $\#V' \geq k$
+and hence $\kappa(u, v) \geq p(u, v)$. We therefore need only show $p(u, v)
+\geq \kappa(u, v)$. 
+
+We will prove the result by induction on the number of edges $e(G)$. The
+induction may begin with the case that $G$ has exactly $2$ edges, the
+minimual number for it to be connected and have two nonadjacent vertices.
+This case is done by inpsection, realizing that $\kappa(u, v) = 1 = p(u,
+v)$.
+
+For the induction step, we consider a special case first: we suppose that
+every edge in $G$ is incident either to $u$ or to $v$. Let $P$ be a path
+from $u$ to $v$. Clearly, we then have $P = uwv$ for some $w \in V_G$. It
+follows that the paths from $u$ to $v$ are in bijection with those vertices
+adjacent to both $u$ and $v$, and further, that all such distinct paths are
+internally disjoint. Set
+\[
+W = \{w \in V_G \mid \text{$w$ is adjacent to both $u$ and $v$}\}
+\]
+In order for $V' \subset V_G$ to be a $(u, v)$-vertex
+cut, it is necessary that $W \subset V'$, since otherwise $G - V'$ would
+contain a $(u, v)$-path. But this is also sufficient, since this is a
+complete list of $(u, v)$-paths. Hence $\kappa(u, v) = p(u, v)$ in this
+case.
+
+We continue with the proof that $p(u, v) \geq \kappa(u, v)$, in the case
+that we may find some edge $e$ neither incident to $u$ nor $v$. To proceed,
+we assume that $\kappa(u, v) = k$, and our goal will be to find a
+collection of $k$ internally disjoint $(u, v)$-paths. By induction, we know
+that $p_{G - e}(u, v) = \kappa_{G - e}(u, v)$. if $\kappa_{G - e}(u, v) =
+k$, then we are therefore done, and we may therefore assume $p_{G - e}(u,
+v) = \kappa_{G - e}(u, v) < \kappa_G(u, v) = k$. Let $V'$ be a $(u,
+v)$-vertex cut in $G - e$ of minimal size, and set $G' = G - V'$. By the
+previous inequality, it follows that $V'$ cannot be a $(u, v)$-vertex cut
+in $G$, and so $G'$ is connected. However, by definition, $G' - e = (G - e)
+- V'$ contains no $(u, v)$-paths, and hence if $w$ is one of the vertices
+incident to $e$, $V'' = V' \cup \{w\}$ is a $(u, v)$-vertex cut in $G$.
+Hence $\kappa_G(u, v) = \kappa_{G - e}(u, v) + 1$, and so $\kappa_{G - e} =
+k - 1 = \#V'$. Let $a, b$ be the vertices adjacent to $e$. 
+
+Since $G'$ is connected with $e$ a bridge, it follows that $G' - e$ has two
+components, with $a$ in one and $b$ in the other component. Without loss of
+generality, let us assume that $u$ is in the component of $G'$ with $a$ and
+$v$ in the component with $b$. Let $A$ be the set of vertices in the
+component of $a$ and $B$ in the component containing $b$. Consider the
+graph $G/A$ obtained by shrinking $A$. Since $e$ is not incident to $u$ in
+$G$, it follows that $a$ is not equal to $u$ in $G'$. Since they are in the
+same connected component of $G' - e$, it folows that $e(G/A) < e(G)$. We
+claim that $\kappa_{G/A}(a, v)= \kappa_{G}(u, v)$. Note first, that since
+$V' \cup \{b\}$ is a $(a, v)$-vertex cut in $G/A$, we have $\kappa_G(u, v)
+\geq \kappa_{G/A}(a, v)$. On the other hand, if $W \subset V_{G/A}$ is an
+$(a, v)$-vertex cut, then we naturally have $W \subset V_G$, and $W$ will
+also be a $(u, v)$-vertex cut (in fact, it will separate every vertex of
+$A$ from $v$). It follows that $\kappa_G(u, v) \leq \kappa_{G/A}(a, v)$ and
+so these are equal as claimed. By induction we then have $p_{G/A}(a, v) =
+k$, and so we may find $k$ internally disjoint $(a, v)$-paths in $G/A$.
+Since $V' \cup \{b\}$ is a vertex cut, it follows that these paths must
+have the form $P_i = a x_i Q_i$, with $Q_i$ an $(x_i, v)$-path, for $i = 1,
+\ldots, k-1$, where $V' = \{x_i\}_{i \in \{1, \ldots, k-1\}}$, and $P_k =
+abQ_k$, $Q_k$ a $(b, v)$-path.
+
+Similarly (but moving in the other direction), we may find internally
+disjoint $(u, b)$-paths in $G/B$, $P_i' = Q_i' x_i b$, with $Q_i$ a $(u,
+x_i)$-path, $1 \leq i \leq k-1$, and $P_k' = Q_k' ab$, with $Q_k'$ a $(u,
+a)$-path. Putting these together, we obtain internally disjoint $(u,
+v)$-paths: $Q_1' Q_1, Q_2' Q_2, \ldots, Q_{k-1}' Q_{k-1} Q_k' ab Q_k$,
+showing that $p_G(u, v) \geq \kappa_G(u, v)$ as desired.
 \end{proof}
 
 \section{Bonds, cotrees and cuts}
 
-\begin{defn}
+\begin{defn} \label{edges between}
 Given a graph $G$ and sets of vertices $S_1, S_2 \subset V_G$, we define
 \[ [S, S'] = \{e \in E_G \mid \exists v \in S, v' \in S', \text{ $e$
 incident to $v$ and $v'$}\}\]
@@ -1474,7 +1575,8 @@ or that the vertices $v, v'$ need be different. For example, for a vertex
 $v$, $[\{v\},\{v\}]$ would denote the set of loops at $v$, $[V_G, V_G]
 = E_G$, and $[\{v\}, V_G]$ is the set of edges incident to $v$.
 
-A particularly important case of this is when $S' = \overline S$, the
+A particularly important case sets of edges of the form $[S, S']$ as in
+Definition~\ref{def:edges between}, is when $S' = \overline S$, the
 complement of $S$ in $V_G$. In this case, removal of the edges $[S,
 \overline S]$ result in a graph in which there can be no path from a vertex
 in $S$ to a vertex in $S'$, and hence represents a set of edges which

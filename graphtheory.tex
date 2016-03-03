@@ -971,6 +971,8 @@ v_1$ is called a \Xb{circuit} when $v_1 e_2 v_2 \cdots v_n$ is a trail,
 and it is called a \Xb{cycle} when $v_1 e_2 v_2 \cdots v_n$ is a path.
 \end{defn}
 
+We remark that in the literature, circuits are also called \Xb{tours}.
+
 Note here that there is some notational ambiguity here, as we have defined
 a cycle to both be a subgraph isomorphic to $C_n$, as well as a particular
 type of walk. Of course the connection is that if $v_1 e_2 v_2 \cdots
@@ -1007,15 +1009,48 @@ Suppose $G$ is a graph and $v \in V_G$ with $\deg(v) = 1$. Then $c(G) = c(G
 - v)$.
 \end{exercise}
 
-
-\chapter{Lecture 5: Trees and spanning trees} \label{lecture 5}
+\section{Spanning subgraphs ans regular graphs}
 
 \begin{defn}
 Let $H$ be a subgraph of $G$. We say that $H$ is a \Xb{spanning subgraph}
 if $V_H = V_G$.
 \end{defn}
 
-In this lecture we will consider spanning subgraphs of various types. These
+
+\begin{defn}
+A graph $G$ is called $k$-\Xb{regular} if every vertex $v \in V_G$ has
+degree $k$.
+\end{defn}
+
+Let's examine $k$ regular simple graphs for small values of $k$. For example, a
+$0$-regular graph is graph with no edges (just isolated vertices).
+
+A connected $1$-regular graph is easily seen to consist just of two
+vertices joined by a single edge. It follows that a general $1$-regular
+graph, being a disjoint union of its components. It follows that for a
+graph $G$, a $1$-regular spanning subgraph $H$ corresponds to what is
+called a \Xb{matching}, namely, a way of writing the set of vertices $V_G$
+as a disjoint union $V_G = \bigcup P_i$ where each $P_i$ is a pair of
+distinct adjacent vertices. 
+
+\begin{lem}
+A connected $2$-regular simple graph is isomorphic to a cycle graph $C_n$
+for some $n$.
+\end{lem}
+
+\begin{defn}
+A Hamiltonian cycle in a graph $G$ is a cycle which passes through each
+vertex of $G$.
+\end{defn}
+
+We see therefore that a connected $2$-regular spanning subgraph of a graph $G$,
+corresponds to a Hamiltonian cycle. 
+
+
+\chapter{Lecture 5: Trees and spanning trees} \label{lecture 5}
+
+In this lecture we will consider spanning subgraphs, focusing on the case
+of trees. These
 play a very important role for a variety of reasons.
 
 \section{Trees}
@@ -1592,37 +1627,69 @@ Given a graph $G$, a \Xb{bond} is a minimal, nonempty edge cut.
 \end{defn}
 
 
-\chapter{Tours}
-\section{Regular graphs}
+\chapter{Circuits and cycles}
+
+We are concerned in this lecture with how one can relate, in some sense a
+graph $G$ to cycle graphs. Since it is substantially easier to work with
+circuits than cycles, we will start with these.
 
 \begin{defn}
-A graph $G$ is called $k$-\Xb{regular} if every vertex $v \in V_G$ has
-degree $k$.
+Let $G$ be a graph. An \textbf{Eulerian circuit}\index{circuit!Eulerian} is
+a circuit in $G$ which includes every edge.
 \end{defn}
+In other words, an Eulerian circuit is a closed walk in $G$, with no
+repeated edges, and which includes every edge. Such a walk may certainly
+have various repeated vertices.
 
-Let's examine $k$ regular simple graphs for small values of $k$. For example, a
-$0$-regular graph is graph with no edges (just isolated vertices).
+The basic fact about these is that there is a very straightforward
+criterion for finding them:
+\begin{thm}
+Let $G$ be a connected graph. Then $G$ has an Eulerian circuit if and only
+if every vertex of $G$ has even degree.
+\end{thm}
+\begin{proof}
+We prove this result by induction on the number of edges in the graph.
+If there are no edges, then the graph, being connected, must consist of a
+single vertex. In this case, the trivial walk at the vertex works. For
+the induction step, suppose that $G$ is a graph and we know that the
+theorem holds for every graph with fewer than $v(G)$ vertices. We know that
+$G$ cannot be a tree, since if it was, it would have at least two leaves
+contradicting the fact that every vertex has even degree. This means that
+we may find a circuit in $G$ (either $G$ is simple and hence has a cycle,
+or it is not simple and hence has a loop or repeated edge, either or which
+gives a circuit). Let $C = v_1 e_2 v_2 \cdots e_n v_n$, $v_n = v_1$ be such
+a circuit in $G$, with $n$ as large as possible. Regarding $C$ as a
+subgraph of $G$, we find that the degree of each of its vertices must be
+even (since the degree of a vertex $w$ in $C$ is twice the number of
+indices $i \in \{1, \ldots, n_1\}$ such that $v_i = w$). Let $E(C)$ be the
+edges of $C$, and consider $G - E(C)$.
 
-A connected $1$-regular graph is easily seen to consist just of two
-vertices joined by a single edge. It follows that a general $1$-regular
-graph, being a disjoint union of its components. It follows that for a
-graph $G$, a $1$-regular spanning subgraph $H$ corresponds to what is
-called a \Xb{matching}, namely, a way of writing the set of vertices $V_G$
-as a disjoint union $V_G = \bigcup P_i$ where each $P_i$ is a pair of
-distinct adjacent vertices. 
+If $G - E(C)$ is a trivial graph (i.e. if it has no edges), then it follows
+that every edge of $G$ is in $C$ and in particular, $C$ is an Eulerian
+circuit, and we are done. On the other hand, if $G - E(C)$ is not trivial,
+then it has a nontrivial component $H$. Since every vertex of $C$ has even
+degree in $C$, and every vertex in $G$ has even degree in $G$, it follows
+that $\deg_H w = \deg_G w - \deg_C w$ is even for every $w \in V_H$. By
+induction, it follows that we may find an Eulerian circuit $C' = w_1 f_2
+w_2 \cdots f_m w_m$ in $H$. By Excercise~\ref{ex: disconnect touching}, we
+may find a vertex $w \in V_H \cap V_C$. We may not obtain a larger circuit
+by ``concatenating'' $C$ and $C'$ as follows: writing $w = v_i = w_j$, we
+have a new circuit 
+\[v_1 e_2 v_2 \cdots e_i v_i f_{j+1} w_{j+1} \cdots f_m
+w_m f_2 w_2 \cdots e_{j-1} w_{j-1} e_j w_j e_{i+1} v_{i+1} \cdots e_n v_n\]
+with length $n + m > n$. But this contradicts the maximality of $n$,
+showing that no such $H$ is possible. Hence $G - E(C)$ was trivial, and $C$
+was necessarily Eulerian.
+\end{proof}
 
-\begin{lem}
-A connected $2$-regular simple graph is isomorphic to a cycle graph $C_n$
-for some $n$.
-\end{lem}
-
-\begin{defn}
-A Hamiltonian cycle in a graph $G$ is a cycle which passes through each
-vertex of $G$.
-\end{defn}
-
-We see that a connected $2$-regular spanning subgraph of a graph $G$,
-corresponds to a Hamiltonian cycle. 
+\begin{exercise} \label{ex: disconnect touching}
+Suppose that $G$ is a connected graph and $F \subset E_G$ is a collection of
+vertices. After the removal of the vertices in $F$, to obtain $G - F$, the
+resulting graph may be disconnected, say $G - F$ is a disjoint union of its
+components $H_1, \ldots, H_k$. Show that for every $i = 1, \ldots, k$ there
+is some vertex $x \in V_{H_i}$ such that $x$ is incident to some edge in
+$F$.
+\end{exercise}
 
 \appendix
 

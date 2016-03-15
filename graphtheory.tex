@@ -479,7 +479,7 @@ V_G$, denoted $\deg v$ to be the number of edges incident to $v$. If it is
 necessary to specify the graph, we may also write $\deg_G v$.
 \end{defn}
 
-\begin{prop}[The degree formula for graphs]
+\begin{prop}[The degree formula for graphs]\label{degree formula}
 Suppose that $G$ is any graph. Then we have
 \[\sum_{v \in V_G} \deg v = 2\#E.\]
 \end{prop}
@@ -973,6 +973,17 @@ and it is called a \Xb{cycle} when $v_1 e_2 v_2 \cdots v_n$ is a path.
 
 We remark that in the literature, circuits are also called \Xb{tours}.
 
+\begin{rem} \label{rotate closed walk}
+Given a closed walk $C = v_1 e_2 v_2 \cdots e_n v_n e_{n+1} v_1$, one can
+obtain other closed walks by traversing the same walk starting at a
+different vertex. That is, for every $i$ we can consider the walk $v_i
+e_{i+1} v_{i+1} \cdots v_n e_{n+1} v_2 e_2 v_2 \cdots v_{i-1} e_i v_i$. In
+this way, we see that we can find closed walks starting and ending at any
+vertex along the original walk $C$, and traversing the same set of vertices
+and edges, and similarly, we can specify the edge with which the walk must
+start.
+\end{rem}
+
 Note here that there is some notational ambiguity here, as we have defined
 a cycle to both be a subgraph isomorphic to $C_n$, as well as a particular
 type of walk. Of course the connection is that if $v_1 e_2 v_2 \cdots
@@ -1037,15 +1048,6 @@ distinct adjacent vertices.
 A connected $2$-regular simple graph is isomorphic to a cycle graph $C_n$
 for some $n$.
 \end{lem}
-
-\begin{defn}
-A Hamiltonian cycle in a graph $G$ is a cycle which passes through each
-vertex of $G$.
-\end{defn}
-
-We see therefore that a connected $2$-regular spanning subgraph of a graph $G$,
-corresponds to a Hamiltonian cycle. 
-
 
 \chapter{Lecture 5: Trees and spanning trees} \label{lecture 5}
 
@@ -1629,6 +1631,8 @@ Given a graph $G$, a \Xb{bond} is a minimal, nonempty edge cut.
 
 \chapter{Circuits and cycles}
 
+\section{Eulerian circuits and trails}
+
 We are concerned in this lecture with how one can relate, in some sense a
 graph $G$ to cycle graphs. Since it is substantially easier to work with
 circuits than cycles, we will start with these.
@@ -1643,7 +1647,7 @@ have various repeated vertices.
 
 The basic fact about these is that there is a very straightforward
 criterion for finding them:
-\begin{thm}
+\begin{thm} \label{euler criterion}
 Let $G$ be a connected graph. Then $G$ has an Eulerian circuit if and only
 if every vertex of $G$ has even degree.
 \end{thm}
@@ -1690,6 +1694,63 @@ components $H_1, \ldots, H_k$. Show that for every $i = 1, \ldots, k$ there
 is some vertex $x \in V_{H_i}$ such that $x$ is incident to some edge in
 $F$.
 \end{exercise}
+
+One can also obtain from this a similar criteria for trails passing through
+every edge:
+
+\begin{defn}
+Let $G$ be a graph. An \textbf{Eulerian trail}\index{trail!Eulerian} is
+a trail in $G$ which includes every edge.
+\end{defn}
+Note that in particular, since a circuit is a particular type of trail,
+that every Eulerian circuit is also an Eulerian trail.
+
+\begin{prop}
+Let $G$ be a connected graph. Then $G$ has an Eulerian trail if and only if
+it has at most $2$ odd degree vertices.
+\end{prop}
+\begin{proof}
+Since every graph has an even number of vertices of odd degree (by the
+degree formula, Proposition~\ref{degree formula}), it follows that $G$
+either has two odd degree vertices or none. In the latter case we are done
+by Theorem~\ref{euler criterion}. Otherwise, letting $v, w$ be the two odd
+degree vertices, consider the graph $G + vw$ obtained by adding a new edge
+between $v$ and $w$. Since all vertices in this graph are even degree, we
+may find a Eulerian circuit in $G + vw$. As in Remark~\ref{rotate closed
+walk}, we may assume that this walk starts with the new edge $e$ connecting
+$v$ and $w$, so that the circuit has the form $weve_1v_1e_2 \cdots e_n w$ (up
+to relabeling $v$ and $w$). But now, the trail $v e_1 v_1 e_2 \cdots e_n w$
+is Eulerian, and we are done.
+\end{proof}
+
+\section{Hamiltonian Cycles}
+
+\begin{defn} 
+A Hamiltonian cycle in a graph $G$ is a cycle which passes through each
+vertex of $G$.
+\end{defn}
+
+We see therefore that a connected $2$-regular spanning subgraph of a graph $G$,
+gives rise to Hamiltonian cycles. 
+
+The problem of determining whether or not a particular graph has a
+Hamiltonian cycle is a famously hard problem, and is in fact, an example of
+an ``NP complete'' problem. Roughly speaking, this means that 
+\begin{enumerate}
+\item
+one can verify that a particular potential cycle is in fact a Hamiltonian
+cycle in polynomial time (with respect to, say, the number of vertices of
+the graph), 
+\item 
+if one could find a polynomial time algorithm which would determine the
+existence of and find a Hamiltonian
+cycles in a general graph, then for any other problem for which a solution
+can be verified in polynomial time, there would exist a polynomial time
+algorithm for finding a solution
+\end{enumerate}
+Needless to say, the best algorithms we have for this problem run in
+exponential time on general graphs. 
+
 
 \appendix
 

@@ -1602,7 +1602,7 @@ showing that $p_G(u, v) \geq \kappa_G(u, v)$ as desired.
 
 \section{Bonds, cotrees and cuts}
 
-\begin{defn} \label{edges between}
+\begin{defn} \label{def:edges between}
 Given a graph $G$ and sets of vertices $S_1, S_2 \subset V_G$, we define
 \[ [S, S'] = \{e \in E_G \mid \exists v \in S, v' \in S', \text{ $e$
 incident to $v$ and $v'$}\}\]
@@ -1819,6 +1819,8 @@ $y$.
 
 \section{Digraphs concepts}
 
+\subsection{Cuts}
+
 It will be useful in this section to collect some basic language
 about digraphs. 
 
@@ -1856,6 +1858,33 @@ We write $\incut(X) = [V_D \setminus X, X]$ and $\outcut(X) = [X, V_D
 $x$, we also write $\incut(x)$ for $\incut(\{x\})$ and $\outcut(x)$ for
 $\outcut(\{x\})$.
 \end{notn}
+
+\subsection{Walks and directed walks}
+
+\begin{defn}
+If $D$ is a digraph, we define a \textbf{directed
+walk}\index{walk!directed} $P$ in $D$ to be a sequence of vertices and
+arrows
+\[P = v_1 a_2 v_2 a_3 \cdots a_n v_n \]
+with $s(a_i) = v_{i-1}$ and $t(a_i) = v_i$.
+\end{defn}
+
+\begin{defn}
+If $D$ is a digraph, we define an \textbf{undirected
+walk}\index{walk!undirected} $P$ in $D$ to be a sequence of vertices and
+arrows
+\[P = v_1 a_2 v_2 a_3 \cdots a_n v_n \]
+such that for each arrow $a_i$ we have
+either
+\begin{itemize}
+\item $s(a_i) = v_{i-1}$ and $t(a_i) = v_i$ or
+\item $t(a_i) = v_{i-1}$ and $s(a_i) = v_i$.
+\end{itemize}
+\end{defn}
+
+We similarly define directed and undirected paths, trails and circuits in
+an analogous
+fashion.\index{path!directed}\index{path!undirected}\index{trail!undirected}\index{trail!directed}\index{circuit!directed}\index{circuit!undirected}
 
 \section{Flows and Cuts}
 
@@ -1916,6 +1945,93 @@ Let $X$ be a subset of $V_D$ with $x \in X$ and $y \not\in X$, and $Y$ a
 subset of $V_D$ with $y \in Y$ and $x \not\in Y$. Then we have
 \[ v(f) = f^+(X) - f^-(X) = f^-(Y) - f^+(Y).\]
 \end{lem}
+
+\newcommand{\val}{\oper{val}}
+\begin{defn}
+We say that $f$ is a \Xb{maximum flow} if for every flow $g$ we have
+$\val(f) \geq \val(g)$.
+\end{defn}
+
+\subsection{Cuts}
+
+\newcommand{\capacity}{\oper{cap}}
+
+Let $X$ be a subset of vertices in a network. We would like to define a
+measurement, which will describe the total
+amount which can potentially flow out of $X$.
+
+To begin, we start with a slightly more intuitive notion: for a collection
+of arrows, we can ask how much can potentially flow across all our arrows:
+
+\begin{defn}
+For a collection $K \subset A_D$ of arrows, we define the \Xb{capacity} of
+$K$, denoted $\capacity(K)$, to be $\sum_{a \in K} c(a)$.
+\end{defn}
+
+We are particularly interested in the case where $K$ is a collection of
+arrows which separates the vertices $x$ and $y$; that is to say, a
+collection of arrows, which, upon removal, results in no possible directed
+paths from $x$ to $y$. A natural way to consider these is to consider
+collections of edges of the form $K = \outcut(X) = [X, V_D \setminus X]$
+where $x \in X$ and $y \not\in X$. 
+
+\begin{rem}
+Since most collections of arrows we are concerned with are of the form
+$\outcut(X)$, we sometimes write $\capacity(X)$ instead of
+$\capacity(\outcut(X))$.
+\end{rem}
+
+\begin{lem}
+Let $D' = D - K$ where $K =\outcut(X)$ as above. Then $D'$ contains no
+directed $(x,y)$-walks.
+\end{lem}
+\begin{defn}
+By definition, since $x \in X$ and $y \not\in X$, every directed walk
+starting from $x$ and ending in $y$ starts out in $X$ and ends in $V_D
+\setminus X$. In particular, along such a walk, we can consider the first
+vertex $v$ arising in the walk which is in $V_D \setminus X$. The
+preceeding vertex, $w$ is therefore in $X$ and the arrow between them in
+the directed walk $a$ must therefore start at $w \in X$ and end in $v \in
+V_D \setminus X$. But this means that $a \in \outcut(X)$, a contradiction.
+\end{defn}
+
+\begin{defn}
+We say that $X \subset V_D$ \textbf{gives a} \Xb{minimum cut}, or that $K =
+\outcut(X)$ \textbf{is a minimum cut} if $x \in X$, $y \not\in X$ and
+$\capacity(K) \geq \capacity(K')$ for every $K' =  \outcut(X')$ whenever
+$X' \subset V_D$ with $x \in X'$ and $y \not\in X'$.
+\end{defn}
+
+\subsection{Flows vs cuts}
+
+The main observation in relating flows and cuts is the following important
+observation: 
+
+\begin{lem}
+If $X$ is any subset of vertices with $x \in X$ and $y \not\in
+X$, and $f$ is any flow on the network, then $\val(f) \leq
+\capacity(\outcut(X))$.
+Further $\val(f) = \capacity(\outcut(X))$ if and only if
+\begin{enumerate}[ 1. ]
+\item $f^-(X) = 0$ and
+\item $f^+(X) = \capacity(\outcut(X))$.
+\end{enumerate}
+\end{lem}
+\begin{proof}
+We observe
+\[\val(f) = f^+(X) - f^-(X) \leq f^+(X) = \sum_{a \in \outcut(X)} f(a) \leq
+\sum_{a \in \outcut(X)} c(a) = \capacity(\outcut(X)) \]
+just by the definitions. But we have equality exactly when both $f^+(X) -
+f^-(X) = f^+(X)$ and when $f^+(X) = \capacity(\outcut(X))$. But $f^+(X) - f^-(X) =
+f^+(X)$ exactly when $f^-(X)$ and so the conclusion follows.
+\end{proof}
+
+This gives the following immediate observation
+\begin{prop}
+Let $f$ be a flow and $X$ a subset of vertices with $x \in X$ and $y
+\not\in X$. Suppose that $\val(f) = \capacity(\outcut(X))$. Then $f$ is a
+maximum flow and $\outcut(X)$ is a minimum cut.
+\end{prop}
 
 \appendix
 

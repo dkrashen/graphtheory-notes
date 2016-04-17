@@ -429,7 +429,7 @@ EXAMPLES:
 \newcommand{\outdeg}{\oper{outdeg}}
 \newcommand{\indeg}{\oper{indeg}}
 
-\begin{defn}
+\begin{defn} \label{inoutdegree}
 Let $D$ be a digraph. For a vertex $v$, we define the \Xb{outdegree} of
 $v$, denoted $\outdeg v$, to be the number of edges whose source is $v$,
 and the \Xb{indegree} of $v$, denoted $\indeg v$, to be the number of edges
@@ -1751,6 +1751,105 @@ algorithm for finding a solution
 Needless to say, the best algorithms we have for this problem run in
 exponential time on general graphs. 
 
+\chapter{Vertex Colorings}
+
+\chapter{Edge Colorings}
+
+\chapter{Digaphs and Networks}
+
+\section{Introduction}
+
+Consider the following problem: we are attempting to transport some
+commodity from city $x$ to city $y$. Various routes exist between city $x$
+and $y$, passing between various intermediate cities. For a given pair of
+cities $a, b$, we have a certain maximum rate of transportation of our
+commodity from $a$ to $b$. The problem is then as follows: how can we
+determine the maximum overall rate of transport from $x$ to $y$ in a given
+situation?
+
+In order to tranlate this into mathematical terms, we consider the
+following setup. We start with a digraph $D$, with two specified vertices
+$x$ and $y$, representing our two cities. To each arrow $a \in A_D$,
+representing some allowable path between two cities, we have a particular
+allowable cost $c(a) \in \mathbb R_{\geq 0}$. Taken together, these
+comprise a real-valued function $c: A_D \to \mathbb R_{\geq 0}$. We refer
+to $c(a)$ as the \textbf{capacity}\index{capacity!of an arrow} of the arrow
+$a$. The collection of data $N = (D, c, x, y)$ comprise a \Xb{network}:
+
+\begin{defn}[Network]
+A network is a quadruple $N = (D, c, x, y)$. consisting of a digraph $D$,
+a non-negative real valued function $c: A_D \to \mathbb R_{\geq 0}$, and
+two specified vertices $x$ and $y$ (refered to as the
+\textbf{source}\index{source (in a network)} and the
+\textbf{sink}\index{sink (in a network)}, respectively).
+\end{defn}
+
+As another example (admittedly somewhat artificial), considering the
+following: suppose we have some number of people in location $x$ and we
+wish to get as many as possible to location $y$, through some collection of
+intermediate locations. In each location, we have some number of rental
+cars, each of which is only allowed to go once, one way, carrying only one
+passenger along a pre-specified road. That is to say, there might be 5
+available cars assigned to go from location $x$ to location $a$, and 8
+available cars assigned to go from $a$ to $b$ (and various other cars going
+between various other cities. The question we then ask is: how many people
+can we get from $x$ to $y$?
+
+The approach which we will develop to answer this question, called the
+min-cut max-flow Theorem, says that, in the example in the previous
+paragraph, the maximum number of people we can get from $x$ to $y$ is the
+same as the mimimal number of cars needed to disable in order to insure
+that no people can successfully get from $x$ to $y$. Intuitively, this
+makes sense: if after disabling, say, 10 cars, we find that no one can get
+from $x$ to $y$, then this says that these 10 cars were, in some way,
+``essential.'' Concretely, every way of getting from $x$ to $y$ must
+involve utilizing one of these 10 cars. But, as we know that each car makes
+at most one journey, with at most 1 person, it follows that we can get no
+more than 10 people from $x$ to $y$. The less obvious fact which we will
+prove is the converse: if 10 is the smallest number of cars needed to
+disable, then we may in fact find a particular assignment of routes which
+actually will transport this theoretical maximum of 10 people from $x$ to
+$y$.
+
+\section{Digraphs concepts}
+
+It will be useful in this section to collect some basic language
+about digraphs. 
+
+\begin{defn}
+Let $D$ be a digraph, and $X, Y \subset V_D$ two collections of vertices.
+We let $[X, Y]$ be the set of arrows starting at a vertex in $X$ and ending
+in a vertex in $Y$. That is,
+\[ [X, Y] = \{a \in A_D | s(a) \in X, \ t(a) \in Y\}. \]
+\end{defn}
+
+\begin{ex}
+$[V_D, V_D]$ is just $A_D$, consisting of all arrows.
+\end{ex}
+
+\begin{ex}
+If $x \in V_D$, then $[\{x\}, V_D]$ is the set of arrows whose source is
+$x$, and $[V_D, \{x\}]$ is the set of arrows whose target is $x$. In
+particular, we have $\#[\{x\}, V_D] = \outdeg x$ and $\#[V_D, \{x\}] =
+\indeg x$ (see Definition~\ref{inoutdegree}).
+\end{ex}
+
+\begin{ex} \label{inoutcuts}
+Let $X \subset V_D$. The \Xb{outcut} for $X$ is the collection of all
+arrows whose source is at $X$ and target is outside of $X$. That is, it is
+the set of arrows $[X, V_D \setminus X]$. We similarly define the
+\Xb{incut} for $X$ as $[V_D \setminus X, X]$.
+\end{ex}
+
+\section{Flows}
+
+A flow in a network $N = (D, c, x, y)$ will be an assignment of a real
+number to each arrow in $D$, representing, for example, the quantity of
+good flowing along the arrow, and comprising together a potential way to
+move goods from $x$ to $y$. 
+
+More formally, suppose we are given a function $f: A_D \to \mathbb R_{\geq
+0}$. We say that $f$ is \Xb{feasable} if $f(a) \leq c(a)$ for each $a$. 
 
 \appendix
 

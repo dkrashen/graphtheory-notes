@@ -1886,6 +1886,36 @@ We similarly define directed and undirected paths, trails and circuits in
 an analogous
 fashion.\index{path!directed}\index{path!undirected}\index{trail!undirected}\index{trail!directed}\index{circuit!directed}\index{circuit!undirected}
 
+\begin{defn} \label{def:forward and backwards arrows}
+Suppose that $P = v_1 a_2 \cdots a_n v_n$ is an undirected path in $D$. We
+say that $a_i$ is a \Xb{forward arrow} in $P$ if $s(a_i) = v_{i-1}$ and
+$t(a_i) = v_i$. We say that $a_i$ is a \Xb{backwards arrow} in $P$ if
+$s(a_i) = v_i$ and $t(a_i) = v_{i-1}$.
+\end{defn}
+Note that being forward or backward is not an intrinsic property of an
+arrow, but rather has to do with an arrow's relationship to a particular
+path. We remark that this concept is more easily defined for paths rather
+than general walks, since in a walk a given arrow may arise multiple times
+in either orientation (although defining this for trails would be fine as
+well).
+
+\subsection{Arrow cuts}
+
+\begin{defn}
+Let $D$ be a digraph and $x, y \in V_D$. We say that $S \subset A_D$ is an
+$(x,y)$-\Xb{arrow cut} if $D - S$ contains no directed $(x,y)$-paths. We say
+that it is minimal if there is no $(x, y)$-arrow cut $S'$ with $S'$ a proper
+subset of $S$.
+\end{defn}
+
+\begin{exercise} \label{exercise:min arrow cut}
+Show that if $K$ is a minimal $(x,y)$-arrow cut, if and only if we can
+partition the vertices of $V_D$ as $V_D = X \cup Y$ with $x \in X, y \in Y$
+and $X \cap Y = \emptyset$, and with $K = [X, Y]$.
+\end{exercise}
+
+
+
 \section{Flows and Cuts}
 
 \subsection{Flows}
@@ -1973,27 +2003,15 @@ arrows which separates the vertices $x$ and $y$; that is to say, a
 collection of arrows, which, upon removal, results in no possible directed
 paths from $x$ to $y$. A natural way to consider these is to consider
 collections of edges of the form $K = \outcut(X) = [X, V_D \setminus X]$
-where $x \in X$ and $y \not\in X$. 
+where $x \in X$ and $y \not\in X$. Recall that by
+Exercise~\ref{exercise:min arrow cut}, minimal cuts which separate $x$ and
+$y$ must always have this form.
 
 \begin{rem}
 Since most collections of arrows we are concerned with are of the form
 $\outcut(X)$, we sometimes write $\capacity(X)$ instead of
 $\capacity(\outcut(X))$.
 \end{rem}
-
-\begin{lem}
-Let $D' = D - K$ where $K =\outcut(X)$ as above. Then $D'$ contains no
-directed $(x,y)$-walks.
-\end{lem}
-\begin{defn}
-By definition, since $x \in X$ and $y \not\in X$, every directed walk
-starting from $x$ and ending in $y$ starts out in $X$ and ends in $V_D
-\setminus X$. In particular, along such a walk, we can consider the first
-vertex $v$ arising in the walk which is in $V_D \setminus X$. The
-preceeding vertex, $w$ is therefore in $X$ and the arrow between them in
-the directed walk $a$ must therefore start at $w \in X$ and end in $v \in
-V_D \setminus X$. But this means that $a \in \outcut(X)$, a contradiction.
-\end{defn}
 
 \begin{defn}
 We say that $X \subset V_D$ \textbf{gives a} \Xb{minimum cut}, or that $K =
@@ -2007,7 +2025,7 @@ $X' \subset V_D$ with $x \in X'$ and $y \not\in X'$.
 The main observation in relating flows and cuts is the following important
 observation: 
 
-\begin{lem}
+\begin{lem} \label{lem:flow cut inequality}
 If $X$ is any subset of vertices with $x \in X$ and $y \not\in
 X$, and $f$ is any flow on the network, then $\val(f) \leq
 \capacity(\outcut(X))$.
@@ -2027,11 +2045,97 @@ f^+(X)$ exactly when $f^-(X)$ and so the conclusion follows.
 \end{proof}
 
 This gives the following immediate observation
-\begin{prop}
+\begin{prop} \label{prop:min cut max flow}
 Let $f$ be a flow and $X$ a subset of vertices with $x \in X$ and $y
 \not\in X$. Suppose that $\val(f) = \capacity(\outcut(X))$. Then $f$ is a
 maximum flow and $\outcut(X)$ is a minimum cut.
 \end{prop}
+\begin{proof}
+If $f'$ is any other flow and $K'$ is any $(x,y)$-arrow cut, then by
+Exercise~\ref{exercise:min arrow cut}, we can find an $(x, y)$ arrow
+cut $K'' \subset K'$ with $K'' = \outcut(X')$ for some subset $X' \subset
+V_D$ with $x \in K''$ and $y \not\in K''$. By Lemma~\ref{lem:flow cut
+inequality}, we have
+\[\val(f') \leq \capacity(\outcut(X)) = \val(f),\]
+showing that $f$ is a max flow and
+\[\capacity(\outcut(X)) = \val(f) \leq \capacity(\outcut(X')) =
+\capacity(K'') \leq
+\capacity(K'),\] showing that $\outcut(X)$ is a minimum cut.
+\end{proof}
+
+\subsection{Unsaturated and increasing paths}
+
+Let $N = (D, c, x, y)$ be a network and $f$ a flow on $N$. We wish to
+understand how well the various arrows in $N$ are being ``utilized'' by the
+function $f$ -- that is to say, which arrows are being used to the fullest of
+their capacity. This idea is most easily thought of from the perspective of
+paths. If $P = v_0 a_1 v_1 \cdots a_n v_n$ is an \textit{undirected} path
+in $D$, we would like to understand ``how efficiently things are flowing
+along $P$ from $v_0$ to $v_n$.'' In particular, there is an implicit
+concept of direction here.
+
+\begin{defn}
+Let $P$ be an undirected path in $D$, and suppose that $a$ is an arrow in
+$P$. We say that $a$ is \textbf{unsaturated}\index{unsaturated (arrow in a
+path in a network)} if $a$ is a forward arrow in $P$ with $f(a) < c(a)$, or
+if $a$ is backwards arrow with $f(a) \neq 0$. We say that $a$ is
+\textbf{saturated}\index{saturated (arrow in a path in a network)} if it is
+not unsaturated.
+\end{defn}
+
+We think of an arrow in a path as being unsaturated if it is being
+underutilized in flowing from the origin to the terminus of the path $P$.
+From this point of view, if the amount of flow at a particular forward
+arrow is less than the capacity of the arrow, we can possibly improve our
+flow by increasing it at the given arrow. If a backwards arrow has a
+nonzero flow, then this represents flow against the direction of the path,
+which could be improved by reducing the amount of backwards flow. On the
+other hand, if an arrow is saturated, then no modification at that arrow
+can improve the flow.
+
+Of course, improving a flow in this way is generally not possible, as it
+will typically conflict with the condition that the flow is conservative.
+For example, if we change a given flow $f$ by adding to the flow only along
+a particular arrow $a$ from $v$ to $w$, then, unless $v$ and $w$ are $x$
+and $y$, we will fail to have conservation hold. On the other hand, if
+every arrow along an undirected path from $x$ to $y$ is unsaturated, we may
+improve our flow by increasing along every forward arrow and decreasing along
+every backwards arrow:
+
+\begin{defn}
+We say that an undirected $(x,y)$-path in $D$ is
+\textbf{increasing}\index{increasing path for a network flow} if every
+arrow in the path is unsaturated.
+\end{defn}
+
+\begin{lem}
+Suppose that $D$ is a network, $f$ is a flow, and $P$ is an increasing
+path. Then $f$ is not a maximum flow.
+\end{lem}
+\begin{proof}
+We can produce a larger flow by increasing along every forward arc and
+decreasing along every backwards arc in $P$.
+\end{proof}
+
+\subsection{The min-cut max-flow theorem}
+
+\begin{thm}
+Suppose that $f$ is a flow on a network $N = (D, c, x, y)$. Then
+\begin{enumerate}[ 1. ]
+\item
+  $f$ is a maximum flow if and only if there are no increasing paths.
+\item
+  If we let $X$ be the set of vertices reachable from $x$ by an unsaturated
+  path, then $\capacity(\outcut(X)) = \val(f)$. In particular $f$ is a
+  maximum flow and $\outcut(X)$ is a minimum cut by Proposition~\ref{prop:min
+  cut max flow}.
+\end{enumerate}
+\end{thm}
+
+\begin{cor}
+Let $f$ be a flow and $K$ an $(x,y)$-arrow cut. Then $f$ is a maximum flow
+and $K$ is a minimum cut if and only if $\val(f) = \capacity(K)$.
+\end{cor}
 
 \appendix
 

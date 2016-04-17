@@ -1777,12 +1777,18 @@ to $c(a)$ as the \textbf{capacity}\index{capacity!of an arrow} of the arrow
 $a$. The collection of data $N = (D, c, x, y)$ comprise a \Xb{network}:
 
 \begin{defn}[Network]
-A network is a quadruple $N = (D, c, x, y)$. consisting of a digraph $D$,
+A network is a quadruple $N = (D, c, x, y)$. consisting of a digraph $D$
+with no loops,
 a non-negative real valued function $c: A_D \to \mathbb R_{\geq 0}$, and
 two specified vertices $x$ and $y$ (refered to as the
 \textbf{source}\index{source (in a network)} and the
 \textbf{sink}\index{sink (in a network)}, respectively).
 \end{defn}
+
+We require that the digraph $D$ have no loops for convenience. If we are
+interested in goods flowing from one location in a digraph to another,
+sending things from a vertex to itself doesen't have any influence in our
+solution.
 
 As another example (admittedly somewhat artificial), considering the
 following: suppose we have some number of people in location $x$ and we
@@ -1841,15 +1847,75 @@ the set of arrows $[X, V_D \setminus X]$. We similarly define the
 \Xb{incut} for $X$ as $[V_D \setminus X, X]$.
 \end{ex}
 
-\section{Flows}
+\newcommand{\outcut}{\oper{outcut}}
+\newcommand{\incut}{\oper{incut}}
+
+\begin{notn}
+We write $\incut(X) = [V_D \setminus X, X]$ and $\outcut(X) = [X, V_D
+\setminus X]$ for the incut and outcut for $X$ respectively. For a vertex
+$x$, we also write $\incut(x)$ for $\incut(\{x\})$ and $\outcut(x)$ for
+$\outcut(\{x\})$.
+\end{notn}
+
+\section{Flows and Cuts}
+
+\subsection{Flows}
 
 A flow in a network $N = (D, c, x, y)$ will be an assignment of a real
 number to each arrow in $D$, representing, for example, the quantity of
 good flowing along the arrow, and comprising together a potential way to
 move goods from $x$ to $y$. 
 
-More formally, suppose we are given a function $f: A_D \to \mathbb R_{\geq
-0}$. We say that $f$ is \Xb{feasable} if $f(a) \leq c(a)$ for each $a$. 
+More formally: 
+\begin{defn}
+Consider a function $f: A_D \to \mathbb R_{\geq
+0}$. We say that $f$ is \Xb{feasable} if $f(a) \leq c(a)$ for each $a$.
+\end{defn}
+This means that each arrow is being used at an amount no more than its
+capacity. For our assignment to represent an actual flow, we should also
+have that for each vertex (with the exceptions of the source $x$ and the
+sink $y$), the amount flowing in should be equal to the amount flowing out.
+
+\begin{defn}
+We say that a function $f: A_D \to \mathbb R_{\geq 0}$ is \Xb{conservative}
+at a vertex $v \in V_D$ if
+\[\sum_{a, t(a) = v} f(a) = \sum_{a, s(a) = v} f(a).\]
+We say that $f$ is \textbf{conservative} (on the network $N$) if it is
+conservative at every vertex $v \neq x, y$.
+\end{defn}
+Intuitively this means that goods can't leave a place if they aren't
+arriving, and on the other hand, we are not allowed to let goods build up
+in an intermediate location: everything arriving at an intermediate
+location must also exit that location.
+
+\begin{defn} \label{def:flow}
+We say that a function $f: A_D \to \mathbb R_{\geq 0}$ is a \Xb{flow} if it
+is both feasable and conservative.
+\end{defn}
+
+To measure how ``good'' a flow is, we define its value. This is a measure
+of the quantity of goods moved from $x$ to $y$.
+
+\begin{defn}
+The \textbf{value}\index{value (of a flow)} is the quantity
+\[v(f) = \sum_{a \in \outcut(x)} f(a) - \sum_{a \in \incut(x)} f(a).\]
+\end{defn}
+
+\begin{defn}
+Let $X \subset V_D$. For a flow $f$ on the network $N$, we define the
+outflow from $X$, denoted $f^+(X)$ by
+\[ f^+(X) = \sum_{a \in \outcut(X)} f(a), \]
+and the inflow into $X$, denoted $f^-(X)$ by
+\[ f^-(X) = \sum_{a \in \incut(X)} f(a).\]
+\end{defn}
+
+Note that we have, by definition $f^+(\{x\}) - f^-(\{x\}) = v(f)$.
+
+\begin{lem}
+Let $X$ be a subset of $V_D$ with $x \in X$ and $y \not\in X$, and $Y$ a
+subset of $V_D$ with $y \in Y$ and $x \not\in Y$. Then we have
+\[ v(f) = f^+(X) - f^-(X) = f^-(Y) - f^+(Y).\]
+\end{lem}
 
 \appendix
 

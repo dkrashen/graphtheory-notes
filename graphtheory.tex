@@ -785,7 +785,39 @@ the graph obtained by removing the vertex $v$ as well as all edges incident
 to $v$.
 \end{defn}
 
+\subsection{Products of graphs}
+
+\begin{defn}
+Let $G$ and $H$ be graphs. We define the \textbf{product}{product of
+graphs} $G \times H$ to be the graph whose vertices are pairs of vertices
+in $G$ and $H$, that is
+\[V_{G \times H} = V_G \times V_H,\]
+with edges corresponding to pairs consisting of an edge in one graph and a
+vertex in the other:
+\[E_{G \times H} = E_G \times V_H \cup E_H \times V_G\]
+and with incidence function $\psi_{G \times H}$ defined by declaring that
+\begin{itemize}
+\item if $e \in E_G, v \in V_H$ with $\psi_G(e) = ab$, then $\psi_{G \times
+H}(e,v) = (av,bv)$,
+\item if $e \in E_H, v \in V_G$ with $\psi_H(e) = ab$, then $\psi_{G \times
+H}(e,v) = (av,bv)$.
+\end{itemize}
+\end{defn}
+
 \section{Exercises}
+
+\begin{exercise}
+Suppose that $G$ and $H$ are simple graphs. Show that $G \times H$ is a
+simple graph with verties $V_G \times V_H$ such that vertices $(v, w)$ and
+$(v', w')$ are adjacent if and only if 
+\begin{itemize}
+\item
+  $v = v'$ and $w$ is adjacent to $w'$ or,
+\item
+  $v$ is adjacent to $v'$ and $w = w'$.
+\end{itemize}
+\end{exercise}
+
 
 \begin{exercise}
 Suppose that $G$ and $H$ are simple graphs. Suppose we have a bijective
@@ -1103,6 +1135,8 @@ as desired.
 \end{proof}
 
 \section{Dijkstra's algorithm}
+
+\subsection{The plot}
 
 Consider the following problem. Given a list of cities $c_1, c_2, \ldots,
 c_n$ and routes connecting certain cities, find the shortest route between

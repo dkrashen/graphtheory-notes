@@ -1,7 +1,6 @@
 
-##csa-notes##
+##graph-theory-notes##
 
-notes on graph theory, following along with MATH/CS4690/6690
-
-UGA Spring 2016, taught by Daniel Krashen
+notes on graph theory
+taught by Daniel Krashen
 
